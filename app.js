@@ -24,6 +24,7 @@ async function fetchProducts() {
     }
 }
 
+
 function renderProducts(products) {
     const container = document.getElementById('product-list');
     container.innerHTML = '';
@@ -33,6 +34,7 @@ function renderProducts(products) {
         div.innerHTML = `
             <h3>${p.nombre}</h3>
             <p>${p.categoria}</p>
+            ${p.imagen ? `<img src="${p.imagen}" alt="${p.nombre}">` : ''}
             ${isAdmin ? `<button class="delete-btn" data-id="${p.id}">X</button>` : ''}
         `;
         container.appendChild(div);
@@ -63,12 +65,37 @@ function showAddProductForm() {
 async function addProduct() {
     const nombre = document.getElementById('product-name').value;
     const categoria = document.getElementById('product-category').value;
+    const fileInput = document.getElementById('product-image');
+    const file = fileInput.files[0];
 
-    if (!nombre || !categoria) return alert('Completa todos los campos');
+    if (!nombre || !categoria || !file) {
+        return alert('Completa todos los campos y selecciona una imagen');
+    }
 
-    const { error } = await supabase.from('productos').insert({ nombre, categoria });
-    if (error) {
-        alert('Error al agregar: ' + error.message);
+    // Generar un nombre único para la imagen
+    const filePath = `public/${Date.now()}_${file.name}`;
+
+    // Subir la imagen al bucket
+    const { error: uploadError } = await supabase.storage
+        .from('productos')
+        .upload(filePath, file);
+
+    if (uploadError) {
+        return alert('Error al subir imagen: ' + uploadError.message);
+    }
+
+    // Obtener la URL pública de la imagen
+    const { data: { publicUrl } } = supabase.storage
+        .from('productos')
+        .getPublicUrl(filePath);
+
+    // Guardar los datos del producto incluyendo la imagen
+    const { error: insertError } = await supabase
+        .from('productos')
+        .insert({ nombre, categoria, imagen: publicUrl });
+
+    if (insertError) {
+        alert('Error al agregar: ' + insertError.message);
     } else {
         alert('Producto agregado');
         document.getElementById('add-form').style.display = 'none';
@@ -76,16 +103,49 @@ async function addProduct() {
     }
 }
 
+
 async function deleteProduct(id) {
     if (!confirm('¿Eliminar este producto?')) return;
-    const { error } = await supabase.from('productos').delete().eq('id', id);
-    if (error) {
-        alert('Error al eliminar: ' + error.message);
+
+    // Obtener el producto para conocer la ruta de la imagen
+    const { data: producto, error: fetchError } = await supabase
+        .from('productos')
+        .select('imagen')
+        .eq('id', id)
+        .single();
+
+    if (fetchError) {
+        return alert('Error al obtener producto: ' + fetchError.message);
+    }
+
+    // Extraer la ruta relativa al bucket desde la URL pública
+    const imageUrl = producto.imagen;
+    const bucketUrl = 'https://hifmffqdooihgotquxnd.supabase.co/storage/v1/object/public/productos/';
+    const imagePath = imageUrl.replace(bucketUrl, '');
+
+    // Eliminar la imagen del bucket
+    const { error: removeError } = await supabase.storage
+        .from('productos')
+        .remove([imagePath]);
+
+    if (removeError) {
+        alert('Error al eliminar imagen: ' + removeError.message);
+    }
+
+    // Luego eliminar el producto de la base de datos
+    const { error: deleteError } = await supabase
+        .from('productos')
+        .delete()
+        .eq('id', id);
+
+    if (deleteError) {
+        alert('Error al eliminar producto: ' + deleteError.message);
     } else {
         alert('Producto eliminado');
         fetchProducts();
     }
 }
+
 
 async function login() {
     const email = document.getElementById('login-email').value;
