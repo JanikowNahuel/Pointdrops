@@ -5,31 +5,79 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Catálogo de Ropa</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
-    .formulario-container, #formularioProducto, #popupEditar { display: none; }
+    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f4f4f4; }
+    h1 { text-align: center; }
+    .filtros, .formulario-container { text-align: center; margin-bottom: 20px; }
     .producto-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-    .producto { background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
-    .producto img { width: 100%; height: auto; border-radius: 5px; }
-    #loginForm { text-align: center; margin-bottom: 20px; }
+    .producto { background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; position: relative; }
+    .producto img { max-width: 100%; height: auto; border-radius: 5px; }
+    .producto h3 { margin: 10px 0 5px; }
+    .producto p { margin: 5px 0; }
+    .producto button { margin: 5px 4px; padding: 4px 8px; font-size: 0.9em; }
+    #formularioProducto { display: none; margin-top: 20px; }
+    input, select, button { padding: 8px; margin: 5px; }
+
+    #popupEditar {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      z-index: 1000;
+    }
+    #popupEditar input, #popupEditar select { display: block; width: 100%; margin: 10px 0; }
+    #popupEditar button { margin-top: 10px; }
+    #overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.4);
+      z-index: 999;
+    }
   </style>
 </head>
 <body>
   <h1>Catálogo de Ropa</h1>
 
-  <div id="loginForm">
-    <input type="email" id="email" placeholder="Correo">
-    <input type="password" id="password" placeholder="Contraseña">
-    <button onclick="login()">Ingresar</button>
-    <button onclick="logout()" style="display:none;" id="logoutBtn">Salir</button>
+  <div class="filtros">
+    <label for="categoria">Filtrar por categoría:</label>
+    <select id="categoria" onchange="filtrarCategoria()">
+      <option value="todos">Todos</option>
+      <option value="zapatillas">Zapatillas</option>
+      <option value="remeras">Remeras</option>
+      <option value="hoodies">Hoodies</option>
+      <option value="pantalones_largos">Pantalones Largos</option>
+      <option value="pantalones_cortos">Pantalones Cortos</option>
+      <option value="gorras">Gorras</option>
+      <option value="boxers">Boxers</option>
+      <option value="medias">Medias</option>
+      <option value="camperas">Camperas</option>
+      <option value="accesorios">Accesorios</option>
+    </select>
   </div>
 
-  <div class="formulario-container" id="formularioContainer">
+  <div class="formulario-container">
     <button onclick="mostrarFormulario()">Agregar producto</button>
     <div id="formularioProducto">
-      <input type="text" id="nombreProducto" placeholder="Nombre">
+      <input type="text" id="nombreProducto" placeholder="Nombre de producto">
       <select id="categoriaProducto">
-        <option value="remeras">Remeras</option>
         <option value="zapatillas">Zapatillas</option>
+        <option value="remeras">Remeras</option>
+        <option value="hoodies">Hoodies</option>
+        <option value="pantalones_largos">Pantalones Largos</option>
+        <option value="pantalones_cortos">Pantalones Cortos</option>
+        <option value="gorras">Gorras</option>
+        <option value="boxers">Boxers</option>
+        <option value="medias">Medias</option>
+        <option value="camperas">Camperas</option>
+        <option value="accesorios">Accesorios</option>
       </select>
       <input type="file" id="imagenProducto" accept="image/*">
       <button onclick="agregarProducto()">Cargar</button>
@@ -38,60 +86,67 @@
 
   <div class="producto-grid" id="productos"></div>
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <div id="overlay"></div>
+  <div id="popupEditar">
+    <h3>Editar producto</h3>
+    <input type="text" id="editarNombre">
+    <select id="editarCategoria">
+      <option value="zapatillas">Zapatillas</option>
+      <option value="remeras">Remeras</option>
+      <option value="hoodies">Hoodies</option>
+      <option value="pantalones_largos">Pantalones Largos</option>
+      <option value="pantalones_cortos">Pantalones Cortos</option>
+      <option value="gorras">Gorras</option>
+      <option value="boxers">Boxers</option>
+      <option value="medias">Medias</option>
+      <option value="camperas">Camperas</option>
+      <option value="accesorios">Accesorios</option>
+    </select>
+    <input type="file" id="editarImagen" accept="image/*">
+    <button onclick="guardarEdicion()">Guardar cambios</button>
+    <button onclick="cerrarPopup()">Cancelar</button>
+  </div>
 
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+  <script>
+    let productos = [];
+    let indiceEditar = null;
+    let imagenEditadaBase64 = null;
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyALvvo8SNO1OvihywpVCOOubxmSuDxmHT8",
-    authDomain: "pointdrops-11728.firebaseapp.com",
-    databaseURL: "https://pointdrops-11728-default-rtdb.firebaseio.com",
-    projectId: "pointdrops-11728",
-    storageBucket: "pointdrops-11728.firebasestorage.app",
-    messagingSenderId: "533171793855",
-    appId: "1:533171793855:web:b10b3dc0a2d4fbbc173b0a",
-    measurementId: "G-KJ1J1R488M"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-
-
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const auth = firebase.auth();
-
-    auth.onAuthStateChanged(user => {
-      if (user && user.email === "janikownahuel@gmail.com") {
-        document.getElementById('formularioContainer').style.display = 'block';
-        document.getElementById('logoutBtn').style.display = 'inline-block';
-      } else {
-        document.getElementById('formularioContainer').style.display = 'none';
-        document.getElementById('logoutBtn').style.display = 'none';
+    function cargarProductosIniciales() {
+      const guardados = localStorage.getItem('catalogoRopa');
+      if (guardados) {
+        productos = JSON.parse(guardados);
       }
-      mostrarProductos();
-    });
-
-    function login() {
-      const email = document.getElementById('email').value;
-      const pass = document.getElementById('password').value;
-      auth.signInWithEmailAndPassword(email, pass)
-        .catch(err => alert("Error de inicio de sesión: " + err.message));
     }
 
-    function logout() {
-      auth.signOut();
+    function guardarEnLocalStorage() {
+      localStorage.setItem('catalogoRopa', JSON.stringify(productos));
+    }
+
+    function mostrarProductos(filtrados) {
+      const contenedor = document.getElementById('productos');
+      contenedor.innerHTML = '';
+      filtrados.forEach((p, index) => {
+        contenedor.innerHTML += 
+          <div class="producto">
+            <img src="${p.imagen}" alt="${p.nombre}" />
+            <h3>${p.nombre}</h3>
+            <p>Categoría: ${p.categoria}</p>
+            <button onclick="editarProducto(${index})">Editar</button>
+            <button onclick="eliminarProducto(${index})">Eliminar</button>
+          </div>
+        ;
+      });
+    }
+
+    function filtrarCategoria() {
+      const cat = document.getElementById('categoria').value;
+      if (cat === 'todos') {
+        mostrarProductos(productos);
+      } else {
+        const filtrados = productos.filter(p => p.categoria === cat);
+        mostrarProductos(filtrados);
+      }
     }
 
     function mostrarFormulario() {
@@ -99,42 +154,103 @@
       form.style.display = form.style.display === 'none' ? 'block' : 'none';
     }
 
+    function redimensionarImagen(file, callback) {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const maxSize = 300;
+          let width = img.width;
+          let height = img.height;
+          if (width > height) {
+            if (width > maxSize) {
+              height *= maxSize / width;
+              width = maxSize;
+            }
+          } else {
+            if (height > maxSize) {
+              width *= maxSize / height;
+              height = maxSize;
+            }
+          }
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          callback(canvas.toDataURL('image/png'));
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
     function agregarProducto() {
       const nombre = document.getElementById('nombreProducto').value.trim();
       const categoria = document.getElementById('categoriaProducto').value;
       const file = document.getElementById('imagenProducto').files[0];
 
-      if (!nombre || !file) return alert('Completa todos los campos.');
+      if (!nombre || !file) return alert('Completá todos los campos.');
 
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const imagenBase64 = e.target.result;
-        db.collection('productos').add({ nombre, categoria, imagen: imagenBase64 })
-          .then(() => {
-            document.getElementById('nombreProducto').value = '';
-            document.getElementById('imagenProducto').value = '';
-            mostrarProductos();
-          });
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function mostrarProductos() {
-      db.collection('productos').get().then(snapshot => {
-        const contenedor = document.getElementById('productos');
-        contenedor.innerHTML = '';
-        snapshot.forEach(doc => {
-          const p = doc.data();
-          contenedor.innerHTML += `
-            <div class="producto">
-              <img src="${p.imagen}" alt="${p.nombre}">
-              <h3>${p.nombre}</h3>
-              <p>Categoría: ${p.categoria}</p>
-            </div>
-          `;
-        });
+      redimensionarImagen(file, function(imagenRedimensionada) {
+        productos.push({ nombre, categoria, imagen: imagenRedimensionada });
+        guardarEnLocalStorage();
+        filtrarCategoria();
+        document.getElementById('nombreProducto').value = '';
+        document.getElementById('imagenProducto').value = '';
       });
     }
-</script>
+
+    function editarProducto(index) {
+      indiceEditar = index;
+      const producto = productos[index];
+      document.getElementById('editarNombre').value = producto.nombre;
+      document.getElementById('editarCategoria').value = producto.categoria;
+      imagenEditadaBase64 = producto.imagen;
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById('popupEditar').style.display = 'block';
+    }
+
+    document.getElementById('editarImagen').addEventListener('change', function () {
+      const file = this.files[0];
+      if (file) {
+        redimensionarImagen(file, function(imagenRedimensionada) {
+          imagenEditadaBase64 = imagenRedimensionada;
+        });
+      }
+    });
+
+    function guardarEdicion() {
+      const nombre = document.getElementById('editarNombre').value.trim();
+      const categoria = document.getElementById('editarCategoria').value;
+
+      if (!nombre || !imagenEditadaBase64 || indiceEditar === null) {
+        return alert('Completá todos los campos.');
+      }
+
+      productos[indiceEditar] = { nombre, categoria, imagen: imagenEditadaBase64 };
+      guardarEnLocalStorage();
+      filtrarCategoria();
+      cerrarPopup();
+    }
+
+    function cerrarPopup() {
+      document.getElementById('overlay').style.display = 'none';
+      document.getElementById('popupEditar').style.display = 'none';
+      indiceEditar = null;
+      imagenEditadaBase64 = null;
+    }
+
+    function eliminarProducto(index) {
+      if (confirm('¿Estás seguro de que querés eliminar este producto?')) {
+        productos.splice(index, 1);
+        guardarEnLocalStorage();
+        filtrarCategoria();
+      }
+    }
+
+    cargarProductosIniciales();
+    mostrarProductos(productos);
+  </script>
 </body>
 </html>
