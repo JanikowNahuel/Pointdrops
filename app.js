@@ -1,78 +1,126 @@
-// Inicializar Supabase
+
 const supabaseUrl = 'https://hifmffqdooihgotquxnd.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhpZm1mZnFkb29paGdvdHF1eG5kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY1OTAxMzQsImV4cCI6MjA2MjE2NjEzNH0.3nprN0B0wsXmpMFEaAbaZLLHvo3jUs4FwhZjkc4fxqo';
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+const adminEmail = 'janikownahuel@gmail.com';
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-// Variables del DOM
-const loginForm = document.getElementById('login');
-const loginButton = loginForm.querySelector('button');
-const loginEmailInput = document.getElementById('login-email');
-const loginPasswordInput = document.getElementById('login-password');
-const logoutButton = document.getElementById('logout-container').querySelector('button');
-const adminActions = document.getElementById('admin-actions');
+let allProducts = [];
+let isAdmin = false;
 
-// Función para iniciar sesión
-async function login() {
-    const email = loginEmailInput.value;
-    const password = loginPasswordInput.value;
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelector('#login button').addEventListener('click', login);
+    document.querySelector('#logout-container button').addEventListener('click', logout);
+    document.querySelector('#admin-actions button').addEventListener('click', showAddProductForm);
+    document.querySelector('#add-form button').addEventListener('click', addProduct);
+    fetchProducts();
+    checkAdmin();
+});
 
-    if (!email || !password) {
-        alert("Por favor, ingrese email y contraseña.");
-        return;
-    }
-
-    try {
-        const { user, error } = await supabase.auth.signInWithPassword({
-            email: email,
-            password: password,
-        });
-
-        if (error) throw error;
-
-        alert("Inicio de sesión exitoso.");
-        loginForm.style.display = 'none';  // Ocultar formulario de login
-        logoutButton.style.display = 'block';  // Mostrar botón de logout
-        adminActions.style.display = 'block';  // Mostrar opciones de administrador
-
-    } catch (error) {
-        console.error('Error al iniciar sesión:', error.message);
-        alert('Error al iniciar sesión: ' + error.message);
+async function fetchProducts() {
+    const { data, error } = await supabase.from('productos').select('*');
+    if (data) {
+        allProducts = data;
+        renderProducts(data);
     }
 }
 
-// Función para cerrar sesión
-async function logout() {
-    const { error } = await supabase.auth.signOut();
+function renderProducts(products) {
+    const container = document.getElementById('product-list');
+    container.innerHTML = '';
+    products.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'product-item';
+        div.innerHTML = `
+            <h3>${p.nombre}</h3>
+            <p>${p.categoria}</p>
+            ${isAdmin ? `<button class="delete-btn" data-id="${p.id}">X</button>` : ''}
+        `;
+        container.appendChild(div);
+    });
+
+    if (isAdmin) {
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = btn.dataset.id;
+                deleteProduct(id);
+            });
+        });
+    }
+}
+
+function filterByCategory(categoria) {
+    if (categoria === 'todas') {
+        renderProducts(allProducts);
+    } else {
+        renderProducts(allProducts.filter(p => p.categoria === categoria));
+    }
+}
+
+function showAddProductForm() {
+    document.getElementById('add-form').style.display = 'block';
+}
+
+async function addProduct() {
+    const nombre = document.getElementById('product-name').value;
+    const categoria = document.getElementById('product-category').value;
+
+    if (!nombre || !categoria) return alert('Completa todos los campos');
+
+    const { error } = await supabase.from('productos').insert({ nombre, categoria });
+    if (error) {
+        alert('Error al agregar: ' + error.message);
+    } else {
+        alert('Producto agregado');
+        document.getElementById('add-form').style.display = 'none';
+        fetchProducts();
+    }
+}
+
+async function deleteProduct(id) {
+    if (!confirm('¿Eliminar este producto?')) return;
+    const { error } = await supabase.from('productos').delete().eq('id', id);
+    if (error) {
+        alert('Error al eliminar: ' + error.message);
+    } else {
+        alert('Producto eliminado');
+        fetchProducts();
+    }
+}
+
+async function login() {
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
-        console.error('Error al cerrar sesión:', error.message);
-        alert('Error al cerrar sesión: ' + error.message);
-        return;
-    }
-
-    alert("Sesión cerrada.");
-    loginForm.style.display = 'block';  // Mostrar formulario de login
-    logoutButton.style.display = 'none';  // Ocultar botón de logout
-    adminActions.style.display = 'none';  // Ocultar opciones de administrador
-}
-
-// Añadir eventos
-loginButton.addEventListener('click', login);
-logoutButton.addEventListener('click', logout);
-
-// Verificar si ya está autenticado
-async function checkSession() {
-    const user = supabase.auth.user();
-    if (user) {
-        loginForm.style.display = 'none';  // Ocultar formulario de login
-        logoutButton.style.display = 'block';  // Mostrar botón de logout
-        adminActions.style.display = 'block';  // Mostrar opciones de administrador
+        alert('Error: ' + error.message);
     } else {
-        loginForm.style.display = 'block';  // Mostrar formulario de login
-        logoutButton.style.display = 'none';  // Ocultar botón de logout
-        adminActions.style.display = 'none';  // Ocultar opciones de administrador
+        alert('Sesión iniciada');
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('logout-container').style.display = 'block';
+        checkAdmin();
     }
 }
 
-// Verificar la sesión al cargar la página
-checkSession();
+async function logout() {
+    await supabase.auth.signOut();
+    alert('Sesión cerrada');
+    document.getElementById('logout-container').style.display = 'none';
+    document.getElementById('admin-actions').style.display = 'none';
+    document.getElementById('add-form').style.display = 'none';
+    document.getElementById('login').style.display = 'block';
+    isAdmin = false;
+    fetchProducts();
+}
+
+async function checkAdmin() {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user && user.email === adminEmail) {
+        isAdmin = true;
+        document.getElementById('admin-actions').style.display = 'block';
+    } else {
+        isAdmin = false;
+    }
+    fetchProducts();
+}
