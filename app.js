@@ -107,7 +107,7 @@ async function addProduct() {
 async function deleteProduct(id) {
     if (!confirm('¿Eliminar este producto?')) return;
 
-    // Obtener el producto para conocer la ruta de la imagen
+    // Obtener el producto para conocer la URL de la imagen
     const { data: producto, error: fetchError } = await supabase
         .from('productos')
         .select('imagen')
@@ -118,8 +118,13 @@ async function deleteProduct(id) {
         return alert('Error al obtener producto: ' + fetchError.message);
     }
 
-    // Extraer la ruta relativa al bucket desde la URL pública
+    // Verificar que existe la imagen en el producto
     const imageUrl = producto.imagen;
+    if (!imageUrl) {
+        return alert('No se encontró la imagen para eliminar');
+    }
+
+    // Extraer la ruta relativa al bucket desde la URL pública
     const bucketUrl = 'https://hifmffqdooihgotquxnd.supabase.co/storage/v1/object/public/productos/';
     const imagePath = imageUrl.replace(bucketUrl, '');
 
@@ -129,7 +134,7 @@ async function deleteProduct(id) {
         .remove([imagePath]);
 
     if (removeError) {
-        alert('Error al eliminar imagen: ' + removeError.message);
+        return alert('Error al eliminar imagen: ' + removeError.message);
     }
 
     // Luego eliminar el producto de la base de datos
@@ -141,10 +146,11 @@ async function deleteProduct(id) {
     if (deleteError) {
         alert('Error al eliminar producto: ' + deleteError.message);
     } else {
-        alert('Producto eliminado');
+        alert('Producto eliminado y imagen eliminada del bucket');
         fetchProducts();
     }
 }
+
 
 
 async function login() {
