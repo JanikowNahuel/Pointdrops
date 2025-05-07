@@ -1,83 +1,55 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Catálogo de Pointdrops</title>
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PointDrops - Catálogo de Ropa</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Catálogo de Ropa</h1>
+    <header>
+        <h1>Bienvenido a PointDrops</h1>
+        <p>Aquí tenés el catálogo. Para cotización y consultas, comunicate por <a href="https://wa.me/yourphone" target="_blank">Whatsapp</a> o <a href="https://instagram.com/yourprofile" target="_blank">Instagram</a>.</p>
+    </header>
 
-  <div class="filtros">
-    <label for="categoria">Filtrar por categoría:</label>
-    <select id="categoria" onchange="filtrarCategoria()">
-      <option value="todos">Todos</option>
-      <option value="zapatillas">Zapatillas</option>
-      <option value="remeras">Remeras</option>
-      <option value="hoodies">Hoodies</option>
-      <option value="pantalones_largos">Pantalones Largos</option>
-      <option value="pantalones_cortos">Pantalones Cortos</option>
-      <option value="gorras">Gorras</option>
-      <option value="boxers">Boxers</option>
-      <option value="medias">Medias</option>
-      <option value="camperas">Camperas</option>
-      <option value="accesorios">Accesorios</option>
-    </select>
-  </div>
-
-  <div class="formulario-container" id="adminOnly" style="display:none;">
-    <button onclick="mostrarFormulario()">Agregar producto</button>
-    <div id="formularioProducto">
-      <input type="text" id="nombreProducto" placeholder="Nombre de producto" />
-      <select id="categoriaProducto">
-        <option value="zapatillas">Zapatillas</option>
-        <option value="remeras">Remeras</option>
-        <option value="hoodies">Hoodies</option>
-        <option value="pantalones_largos">Pantalones Largos</option>
-        <option value="pantalones_cortos">Pantalones Cortos</option>
-        <option value="gorras">Gorras</option>
-        <option value="boxers">Boxers</option>
-        <option value="medias">Medias</option>
-        <option value="camperas">Camperas</option>
-        <option value="accesorios">Accesorios</option>
-      </select>
-      <input type="file" id="imagenProducto" accept="image/*" />
-      <button onclick="agregarProducto()">Cargar</button>
+    <div class="filter-container">
+        <button class="filter-btn" onclick="filterCategory('remeras')">Remeras</button>
+        <button class="filter-btn" onclick="filterCategory('pantalones largos')">Pantalones Largos</button>
+        <button class="filter-btn" onclick="filterCategory('pantalones cortos')">Pantalones Cortos</button>
+        <button class="filter-btn" onclick="filterCategory('hoodies')">Hoodies</button>
+        <button class="filter-btn" onclick="filterCategory('camperas')">Camperas</button>
+        <button class="filter-btn" onclick="filterCategory('gorras')">Gorras</button>
+        <button class="filter-btn" onclick="filterCategory('accesorios')">Accesorios</button>
     </div>
-  </div>
 
-  <div id="productos" class="producto-grid"></div>
+    <div id="catalogo" class="catalogo"></div>
 
-  <div id="overlay"></div>
-  <div id="popupEditar">
-    <h3>Editar producto</h3>
-    <input type="text" id="editarNombre" />
-    <select id="editarCategoria">
-      <option value="zapatillas">Zapatillas</option>
-      <option value="remeras">Remeras</option>
-      <option value="hoodies">Hoodies</option>
-      <option value="pantalones_largos">Pantalones Largos</option>
-      <option value="pantalones_cortos">Pantalones Cortos</option>
-      <option value="gorras">Gorras</option>
-      <option value="boxers">Boxers</option>
-      <option value="medias">Medias</option>
-      <option value="camperas">Camperas</option>
-      <option value="accesorios">Accesorios</option>
-    </select>
-    <input type="file" id="editarImagen" accept="image/*" />
-    <button onclick="guardarEdicion()">Guardar cambios</button>
-    <button onclick="cerrarPopup()">Cancelar</button>
-  </div>
+    <div id="admin-actions" class="admin-actions" style="display:none;">
+        <button onclick="openAddProduct()">Agregar Producto</button>
+    </div>
 
-  <div class="auth-container">
-    <input type="email" id="email" placeholder="Correo electrónico" />
-    <input type="password" id="password" placeholder="Contraseña" />
-    <button onclick="login()">Iniciar sesión</button>
-    <button onclick="logout()">Cerrar sesión</button>
-    <p id="loginStatus"></p>
-  </div>
+    <!-- Modal para agregar producto -->
+    <div id="add-product-modal" class="modal">
+        <div class="modal-content">
+            <h2>Agregar Producto</h2>
+            <label for="nombre">Nombre del Producto:</label>
+            <input type="text" id="nombre" required>
+            <label for="categoria">Categoría:</label>
+            <select id="categoria">
+                <option value="remeras">Remeras</option>
+                <option value="pantalones largos">Pantalones Largos</option>
+                <option value="pantalones cortos">Pantalones Cortos</option>
+                <option value="hoodies">Hoodies</option>
+                <option value="camperas">Camperas</option>
+                <option value="gorras">Gorras</option>
+                <option value="accesorios">Accesorios</option>
+            </select>
+            <button onclick="addProduct()">Agregar</button>
+            <button onclick="closeAddProduct()">Cerrar</button>
+        </div>
+    </div>
 
-  <script type="module" src="app.js"></script>
+    <script src="supabase.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
