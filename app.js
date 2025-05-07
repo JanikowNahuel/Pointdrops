@@ -60,13 +60,37 @@ function showAddProductForm() {
     document.getElementById('add-form').style.display = 'block';
 }
 
+// Función para agregar un producto
 async function addProduct() {
     const nombre = document.getElementById('product-name').value;
     const categoria = document.getElementById('product-category').value;
+    const imageFile = document.getElementById('product-image').files[0]; // Obtener el archivo de imagen
 
-    if (!nombre || !categoria) return alert('Completa todos los campos');
+    if (!nombre || !categoria || !imageFile) {
+        return alert('Completa todos los campos, incluyendo la imagen');
+    }
 
-    const { error } = await supabase.from('productos').insert({ nombre, categoria });
+    // Subir la imagen a Supabase Storage
+    const { data: imageData, error: uploadError } = await supabase.storage
+        .from('productos') // Asegúrate de que este sea el nombre correcto del bucket
+        .upload(`public/${imageFile.name}`, imageFile);
+
+    if (uploadError) {
+        return alert('Error al subir la imagen: ' + uploadError.message);
+    }
+
+    // Obtener la URL pública de la imagen subida
+    const imageUrl = supabase.storage
+        .from('productos')
+        .getPublicUrl(`public/${imageFile.name}`).publicURL;
+
+    // Insertar el producto en la base de datos, incluyendo la URL de la imagen
+    const { error } = await supabase.from('productos').insert({
+        nombre,
+        categoria,
+        imagen_url: imageUrl, // Aquí estamos guardando la URL de la imagen
+    });
+
     if (error) {
         alert('Error al agregar: ' + error.message);
     } else {
