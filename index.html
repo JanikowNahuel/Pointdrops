@@ -43,29 +43,30 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
-  <script>
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyALvvo8SNO1OvihywpVCOOubxmSuDxmHT8",
-  authDomain: "pointdrops-11728.firebaseapp.com",
-  databaseURL: "https://pointdrops-11728-default-rtdb.firebaseio.com",
-  projectId: "pointdrops-11728",
-  storageBucket: "pointdrops-11728.firebasestorage.app",
-  messagingSenderId: "533171793855",
-  appId: "1:533171793855:web:b10b3dc0a2d4fbbc173b0a",
-  measurementId: "G-KJ1J1R488M"
-};
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyALvvo8SNO1OvihywpVCOOubxmSuDxmHT8",
+    authDomain: "pointdrops-11728.firebaseapp.com",
+    databaseURL: "https://pointdrops-11728-default-rtdb.firebaseio.com",
+    projectId: "pointdrops-11728",
+    storageBucket: "pointdrops-11728.firebasestorage.app",
+    messagingSenderId: "533171793855",
+    appId: "1:533171793855:web:b10b3dc0a2d4fbbc173b0a",
+    measurementId: "G-KJ1J1R488M"
+  };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
@@ -134,6 +135,6 @@ const analytics = getAnalytics(app);
         });
       });
     }
-  </script>
+</script>
 </body>
 </html>
