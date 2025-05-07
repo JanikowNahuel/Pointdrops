@@ -4,59 +4,75 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
 // Variables del DOM
-const addForm = document.getElementById('add-form');
-const productNameInput = document.getElementById('product-name');
-const productCategoryInput = document.getElementById('product-category');
-const productImageInput = document.getElementById('product-image');
+const loginForm = document.getElementById('login');
+const loginButton = loginForm.querySelector('button');
+const loginEmailInput = document.getElementById('login-email');
+const loginPasswordInput = document.getElementById('login-password');
+const logoutButton = document.getElementById('logout-container').querySelector('button');
+const adminActions = document.getElementById('admin-actions');
 
-// Función para agregar un producto
-async function addProduct() {
-    const name = productNameInput.value;
-    const category = productCategoryInput.value;
-    const file = productImageInput.files[0];
+// Función para iniciar sesión
+async function login() {
+    const email = loginEmailInput.value;
+    const password = loginPasswordInput.value;
 
-    if (!name || !category || !file) {
-        alert("Por favor, complete todos los campos.");
+    if (!email || !password) {
+        alert("Por favor, ingrese email y contraseña.");
         return;
     }
 
     try {
-        // Subir la imagen a Supabase Storage
-        const { data, error: uploadError } = await supabase.storage
-            .from('products')
-            .upload(`public/${file.name}`, file);
+        const { user, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password,
+        });
 
-        if (uploadError) {
-            console.error('Error al subir la imagen:', uploadError);
-            alert('Error al subir la imagen.');
-            return;
-        }
+        if (error) throw error;
 
-        // Obtener URL de la imagen subida
-        const imageUrl = `${supabaseUrl}/storage/v1/object/public/products/${data.path}`;
+        alert("Inicio de sesión exitoso.");
+        loginForm.style.display = 'none';  // Ocultar formulario de login
+        logoutButton.style.display = 'block';  // Mostrar botón de logout
+        adminActions.style.display = 'block';  // Mostrar opciones de administrador
 
-        // Guardar el producto en la base de datos
-        const { data: product, error: dbError } = await supabase
-            .from('productos')
-            .insert([{
-                nombre: name,
-                categoria: category,
-                imagen_url: imageUrl
-            }]);
-
-        if (dbError) {
-            console.error('Error al agregar el producto:', dbError);
-            alert('Error al agregar el producto: ' + dbError.message);
-            return;
-        }
-
-        alert("Producto agregado exitosamente!");
-        addForm.reset();  // Limpiar el formulario
     } catch (error) {
-        console.error("Error al agregar producto: ", error);
-        alert("Error al agregar: " + error.message);
+        console.error('Error al iniciar sesión:', error.message);
+        alert('Error al iniciar sesión: ' + error.message);
     }
 }
 
-// Agregar el evento al botón de agregar producto
-document.querySelector('#add-form button').addEventListener('click', addProduct);
+// Función para cerrar sesión
+async function logout() {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+        console.error('Error al cerrar sesión:', error.message);
+        alert('Error al cerrar sesión: ' + error.message);
+        return;
+    }
+
+    alert("Sesión cerrada.");
+    loginForm.style.display = 'block';  // Mostrar formulario de login
+    logoutButton.style.display = 'none';  // Ocultar botón de logout
+    adminActions.style.display = 'none';  // Ocultar opciones de administrador
+}
+
+// Añadir eventos
+loginButton.addEventListener('click', login);
+logoutButton.addEventListener('click', logout);
+
+// Verificar si ya está autenticado
+async function checkSession() {
+    const user = supabase.auth.user();
+    if (user) {
+        loginForm.style.display = 'none';  // Ocultar formulario de login
+        logoutButton.style.display = 'block';  // Mostrar botón de logout
+        adminActions.style.display = 'block';  // Mostrar opciones de administrador
+    } else {
+        loginForm.style.display = 'block';  // Mostrar formulario de login
+        logoutButton.style.display = 'none';  // Ocultar botón de logout
+        adminActions.style.display = 'none';  // Ocultar opciones de administrador
+    }
+}
+
+// Verificar la sesión al cargar la página
+checkSession();
