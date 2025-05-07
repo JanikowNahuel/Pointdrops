@@ -12,6 +12,15 @@
         <p>Aquí tenés el catálogo. Para cotización y consultas, comunicate por <a href="https://wa.me/yourphone" target="_blank">Whatsapp</a> o <a href="https://instagram.com/yourprofile" target="_blank">Instagram</a>.</p>
     </header>
 
+    <div id="login" class="login-container">
+        <input type="email" id="login-email" placeholder="Email" required>
+        <input type="password" id="login-password" placeholder="Contraseña" required>
+        <button onclick="login()">Iniciar sesión</button>
+    </div>
+    <div id="logout-container" style="display:none;">
+        <button onclick="logout()">Cerrar sesión</button>
+    </div>
+    
     <div class="filter-container">
         <button class="filter-btn" onclick="filterCategory('remeras')">Remeras</button>
         <button class="filter-btn" onclick="filterCategory('pantalones largos')">Pantalones Largos</button>
