@@ -1,4 +1,3 @@
-
 const supabaseUrl = 'https://hifmffqdooihgotquxnd.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhpZm1mZnFkb29paGdvdHF1eG5kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY1OTAxMzQsImV4cCI6MjA2MjE2NjEzNH0.3nprN0B0wsXmpMFEaAbaZLLHvo3jUs4FwhZjkc4fxqo';
 const adminEmail = 'janikownahuel@gmail.com';
@@ -33,6 +32,7 @@ function renderProducts(products) {
         div.innerHTML = `
             <h3>${p.nombre}</h3>
             <p>${p.categoria}</p>
+            ${p.imagen_url ? `<img src="${p.imagen_url}" alt="${p.nombre}" style="max-width:100px;">` : ''}
             ${isAdmin ? `<button class="delete-btn" data-id="${p.id}">X</button>` : ''}
         `;
         container.appendChild(div);
@@ -60,35 +60,36 @@ function showAddProductForm() {
     document.getElementById('add-form').style.display = 'block';
 }
 
-// Función para agregar un producto
 async function addProduct() {
     const nombre = document.getElementById('product-name').value;
     const categoria = document.getElementById('product-category').value;
-    const imageFile = document.getElementById('product-image').files[0]; // Obtener el archivo de imagen
+    const imageFile = document.getElementById('product-image').files[0];
 
     if (!nombre || !categoria || !imageFile) {
         return alert('Completa todos los campos, incluyendo la imagen');
     }
 
-    // Subir la imagen a Supabase Storage
-    const { data: imageData, error: uploadError } = await supabase.storage
-        .from('productos') // Asegúrate de que este sea el nombre correcto del bucket
-        .upload(`public/${imageFile.name}`, imageFile);
+    // Subir imagen con nombre único
+    const filePath = `public/${Date.now()}_${imageFile.name}`;
+    const { error: uploadError } = await supabase.storage
+        .from('productos')
+        .upload(filePath, imageFile);
 
     if (uploadError) {
         return alert('Error al subir la imagen: ' + uploadError.message);
     }
 
-    // Obtener la URL pública de la imagen subida
-    const imageUrl = supabase.storage
+    // Obtener URL pública
+    const { data: publicUrlData } = supabase.storage
         .from('productos')
-        .getPublicUrl(`public/${imageFile.name}`).publicURL;
+        .getPublicUrl(filePath);
+    const imageUrl = publicUrlData.publicUrl;
 
-    // Insertar el producto en la base de datos, incluyendo la URL de la imagen
+    // Insertar en la base de datos
     const { error } = await supabase.from('productos').insert({
         nombre,
         categoria,
-        imagen_url: imageUrl, // Aquí estamos guardando la URL de la imagen
+        imagen_url: imageUrl,
     });
 
     if (error) {
@@ -148,3 +149,4 @@ async function checkAdmin() {
     }
     fetchProducts();
 }
+
