@@ -36,6 +36,10 @@
             width: 200px;
             position: relative;
         }
+        .product-item img {
+            max-width: 100%;
+            height: auto;
+        }
         .delete-btn {
             position: absolute;
             top: 5px;
@@ -88,7 +92,17 @@
     <div id="add-form">
         <h3>Agregar nuevo producto</h3>
         <input type="text" id="product-name" placeholder="Nombre del producto"><br>
-        <input type="text" id="product-category" placeholder="Categoría"><br>
+        <select id="product-category">
+            <option value="">Seleccionar categoría</option>
+            <option value="remeras">Remeras</option>
+            <option value="pantalones largos">Pantalones largos</option>
+            <option value="pantalones cortos">Pantalones cortos</option>
+            <option value="hoodies">Hoodies</option>
+            <option value="camperas">Camperas</option>
+            <option value="gorras">Gorras</option>
+            <option value="accesorios">Accesorios</option>
+        </select><br>
+        <input type="file" id="product-image"><br>
         <button>Guardar producto</button>
     </div>
 
