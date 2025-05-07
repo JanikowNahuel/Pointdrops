@@ -1,126 +1,62 @@
-
+// Inicializar Supabase
 const supabaseUrl = 'https://hifmffqdooihgotquxnd.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhpZm1mZnFkb29paGdvdHF1eG5kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY1OTAxMzQsImV4cCI6MjA2MjE2NjEzNH0.3nprN0B0wsXmpMFEaAbaZLLHvo3jUs4FwhZjkc4fxqo';
-const adminEmail = 'janikownahuel@gmail.com';
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-let allProducts = [];
-let isAdmin = false;
+// Variables del DOM
+const addForm = document.getElementById('add-form');
+const productNameInput = document.getElementById('product-name');
+const productCategoryInput = document.getElementById('product-category');
+const productImageInput = document.getElementById('product-image');
 
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelector('#login button').addEventListener('click', login);
-    document.querySelector('#logout-container button').addEventListener('click', logout);
-    document.querySelector('#admin-actions button').addEventListener('click', showAddProductForm);
-    document.querySelector('#add-form button').addEventListener('click', addProduct);
-    fetchProducts();
-    checkAdmin();
-});
-
-async function fetchProducts() {
-    const { data, error } = await supabase.from('productos').select('*');
-    if (data) {
-        allProducts = data;
-        renderProducts(data);
-    }
-}
-
-function renderProducts(products) {
-    const container = document.getElementById('product-list');
-    container.innerHTML = '';
-    products.forEach(p => {
-        const div = document.createElement('div');
-        div.className = 'product-item';
-        div.innerHTML = `
-            <h3>${p.nombre}</h3>
-            <p>${p.categoria}</p>
-            ${isAdmin ? `<button class="delete-btn" data-id="${p.id}">X</button>` : ''}
-        `;
-        container.appendChild(div);
-    });
-
-    if (isAdmin) {
-        document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const id = btn.dataset.id;
-                deleteProduct(id);
-            });
-        });
-    }
-}
-
-function filterByCategory(categoria) {
-    if (categoria === 'todas') {
-        renderProducts(allProducts);
-    } else {
-        renderProducts(allProducts.filter(p => p.categoria === categoria));
-    }
-}
-
-function showAddProductForm() {
-    document.getElementById('add-form').style.display = 'block';
-}
-
+// Función para agregar un producto
 async function addProduct() {
-    const nombre = document.getElementById('product-name').value;
-    const categoria = document.getElementById('product-category').value;
+    const name = productNameInput.value;
+    const category = productCategoryInput.value;
+    const file = productImageInput.files[0];
 
-    if (!nombre || !categoria) return alert('Completa todos los campos');
+    if (!name || !category || !file) {
+        alert("Por favor, complete todos los campos.");
+        return;
+    }
 
-    const { error } = await supabase.from('productos').insert({ nombre, categoria });
-    if (error) {
-        alert('Error al agregar: ' + error.message);
-    } else {
-        alert('Producto agregado');
-        document.getElementById('add-form').style.display = 'none';
-        fetchProducts();
+    try {
+        // Subir la imagen a Supabase Storage
+        const { data, error: uploadError } = await supabase.storage
+            .from('products')
+            .upload(`public/${file.name}`, file);
+
+        if (uploadError) {
+            console.error('Error al subir la imagen:', uploadError);
+            alert('Error al subir la imagen.');
+            return;
+        }
+
+        // Obtener URL de la imagen subida
+        const imageUrl = `${supabaseUrl}/storage/v1/object/public/products/${data.path}`;
+
+        // Guardar el producto en la base de datos
+        const { data: product, error: dbError } = await supabase
+            .from('productos')
+            .insert([{
+                nombre: name,
+                categoria: category,
+                imagen_url: imageUrl
+            }]);
+
+        if (dbError) {
+            console.error('Error al agregar el producto:', dbError);
+            alert('Error al agregar el producto: ' + dbError.message);
+            return;
+        }
+
+        alert("Producto agregado exitosamente!");
+        addForm.reset();  // Limpiar el formulario
+    } catch (error) {
+        console.error("Error al agregar producto: ", error);
+        alert("Error al agregar: " + error.message);
     }
 }
 
-async function deleteProduct(id) {
-    if (!confirm('¿Eliminar este producto?')) return;
-    const { error } = await supabase.from('productos').delete().eq('id', id);
-    if (error) {
-        alert('Error al eliminar: ' + error.message);
-    } else {
-        alert('Producto eliminado');
-        fetchProducts();
-    }
-}
-
-async function login() {
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-password').value;
-
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-
-    if (error) {
-        alert('Error: ' + error.message);
-    } else {
-        alert('Sesión iniciada');
-        document.getElementById('login').style.display = 'none';
-        document.getElementById('logout-container').style.display = 'block';
-        checkAdmin();
-    }
-}
-
-async function logout() {
-    await supabase.auth.signOut();
-    alert('Sesión cerrada');
-    document.getElementById('logout-container').style.display = 'none';
-    document.getElementById('admin-actions').style.display = 'none';
-    document.getElementById('add-form').style.display = 'none';
-    document.getElementById('login').style.display = 'block';
-    isAdmin = false;
-    fetchProducts();
-}
-
-async function checkAdmin() {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user && user.email === adminEmail) {
-        isAdmin = true;
-        document.getElementById('admin-actions').style.display = 'block';
-    } else {
-        isAdmin = false;
-    }
-    fetchProducts();
-}
+// Agregar el evento al botón de agregar producto
+document.querySelector('#add-form button').addEventListener('click', addProduct);
