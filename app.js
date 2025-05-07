@@ -1,3 +1,4 @@
+
 const supabaseUrl = 'https://hifmffqdooihgotquxnd.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhpZm1mZnFkb29paGdvdHF1eG5kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY1OTAxMzQsImV4cCI6MjA2MjE2NjEzNH0.3nprN0B0wsXmpMFEaAbaZLLHvo3jUs4FwhZjkc4fxqo';
 const adminEmail = 'janikownahuel@gmail.com';
@@ -29,11 +30,11 @@ function renderProducts(products) {
     products.forEach(p => {
         const div = document.createElement('div');
         div.className = 'product-item';
-        div.innerHTML = 
+        div.innerHTML = `
             <h3>${p.nombre}</h3>
             <p>${p.categoria}</p>
-            ${isAdmin ? <button class="delete-btn" data-id="${p.id}">X</button> : ''}
-        ;
+            ${isAdmin ? `<button class="delete-btn" data-id="${p.id}">X</button>` : ''}
+        `;
         container.appendChild(div);
     });
 
