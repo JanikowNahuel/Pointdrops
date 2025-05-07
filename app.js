@@ -73,7 +73,8 @@ async function addProduct() {
     }
 
     // Generar un nombre único para la imagen
-    const filePath = `public/${Date.now()}_${file.name}`;
+    const filePath = `${Date.now()}_${file.name}`;
+
 
     // Subir la imagen al bucket
     const { error: uploadError } = await supabase.storage
@@ -125,8 +126,8 @@ async function deleteProduct(id) {
     }
 
     // Extraer la ruta relativa al bucket desde la URL pública
-    const bucketUrl = 'https://hifmffqdooihgotquxnd.supabase.co/storage/v1/object/public/productos/';
-    const imagePath = imageUrl.replace(bucketUrl, '');
+    const imagePath = imageUrl.split('/').slice(-1)[0];
+
 
     // Eliminar la imagen del bucket
     const { error: removeError } = await supabase.storage
