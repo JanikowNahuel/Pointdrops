@@ -1,33 +1,44 @@
-/* styles.css */
 body {
     font-family: 'Segoe UI', sans-serif;
-    background-color: #f7f7f7;
-    color: #222;
     margin: 0;
-    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
 }
 
 header {
-    background-color: #111;
-    color: white;
-    padding: 30px 20px;
     text-align: center;
+    background-color: #111;
+    color: #fff;
+    padding: 20px 10px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+header p {
+    font-size: 14px;
+    margin: 5px 0 15px;
 }
 
 #filters {
-    text-align: center;
-    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px;
+    background-color: #fff;
 }
 
 #filters button {
-    margin: 5px;
-    padding: 10px 15px;
-    border: none;
+    padding: 8px 15px;
     background-color: #333;
-    color: white;
-    border-radius: 5px;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
     cursor: pointer;
-    transition: background 0.3s ease;
+    transition: background-color 0.2s;
 }
 
 #filters button:hover {
@@ -57,6 +68,13 @@ header {
     transform: scale(1.02);
 }
 
+.product-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
 .product-card h3 {
     font-size: 18px;
     margin: 8px 0 4px;
@@ -68,7 +86,6 @@ header {
     font-size: 14px;
     color: #666;
 }
-
 
 .delete-button {
     position: absolute;
@@ -84,68 +101,77 @@ header {
     cursor: pointer;
 }
 
-input, select {
-    padding: 8px;
-    margin: 5px 0;
+#add-form, #login, #logout-container, #admin-actions {
+    margin: 20px auto;
+    max-width: 400px;
+    display: none;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+input, select, button {
     width: 100%;
-    max-width: 300px;
-    box-sizing: border-box;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
 }
 
 button {
+    background-color: #333;
+    color: white;
     font-weight: bold;
-    margin-top: 10px;
+    border: none;
+    cursor: pointer;
 }
 
-#add-form, #login, #logout-container, #admin-actions {
-    margin: 30px auto;
-    max-width: 400px;
-    background: #fff;
+button:hover {
+    background-color: #555;
+}
+
+/* Redes sociales */
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-#social-icons {
-    margin-top: 10px;
 }
 
-#social-icons a {
-    color: #fff;
+.social-icons a {
+    color: #333;
     font-size: 24px;
-    margin-right: 15px;
     text-decoration: none;
+    transition: transform 0.2s ease;
 }
 
-#social-icons a:hover {
-    color: #1db954;
+.social-icons a:hover {
+    transform: scale(1.2);
+    color: #0077b5;
 }
 
-@media (max-width: 600px) {
-    header {
-        text-align: center;
+/* Responsive */
+@media screen and (max-width: 600px) {
+    header h1 {
+        font-size: 22px;
     }
 
     #filters {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
-        padding: 10px;
+        flex-direction: column;
+        align-items: center;
     }
 
     #filters button {
-        flex: 1 0 45%;
-        margin: 5px 0;
+        width: 90%;
+        max-width: 300px;
     }
 
-    #add-form, #login, #logout-container, #admin-actions {
-        margin: 10px auto;
+    .product-card {
         width: 90%;
     }
 
-    #product-list {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    #add-form, #login, #logout-container, #admin-actions {
+        margin: 15px;
     }
 }
