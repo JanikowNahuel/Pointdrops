@@ -17,15 +17,18 @@
     </header>
 
     <div id="filters">
-        <button onclick="filterByCategory('todas')">Todas</button>
-        <button onclick="filterByCategory('remeras')">Remeras</button>
-        <button onclick="filterByCategory('pantalones largos')">Pantalones largos</button>
-        <button onclick="filterByCategory('pantalones cortos')">Pantalones cortos</button>
-        <button onclick="filterByCategory('hoodies')">Hoodies</button>
-        <button onclick="filterByCategory('camperas')">Camperas</button>
-        <button onclick="filterByCategory('gorras')">Gorras</button>
-        <button onclick="filterByCategory('accesorios')">Accesorios</button>
+      <select id="category-select">
+          <option value="todas">Todas las categorías</option>
+          <option value="remeras">Remeras</option>
+          <option value="pantalones largos">Pantalones largos</option>
+          <option value="pantalones cortos">Pantalones cortos</option>
+          <option value="hoodies">Hoodies</option>
+          <option value="camperas">Camperas</option>
+          <option value="gorras">Gorras</option>
+          <option value="accesorios">Accesorios</option>
+      </select>
     </div>
+
 
     <div id="product-list"></div>
 
