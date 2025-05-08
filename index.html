@@ -1,24 +1,39 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>PointDrops</title>
+            gap: 10px;
+            padding: 20px;
+        }
+        .product-item {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 200px;
+            position: relative;
+        }
+        .product-item img {
+            max-width: 100%;
+            height: auto;
+        }
+        .delete-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #add-form, #login, #logout-container, #admin-actions {
+            margin: 20px;
+            display: none;
+        }
+    </style>
+
     <link rel="stylesheet" href="styles.css">
-    <script src="https://kit.fontawesome.com/a2e0e6ad01.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <header>
         <h1>Bienvenido a PointDrops</h1>
         <p>Acá tenés el catálogo. Para cotización y consultas comunicarse por WhatsApp/Instagram</p>
-        <div id="social-icons">
-            <a href="https://wa.me/5493516113270" target="_blank" title="WhatsApp">
-                <i class="fab fa-whatsapp"></i>
-            </a>
-            <a href="https://www.instagram.com/pointdrops" target="_blank" title="Instagram">
-                <i class="fab fa-instagram"></i>
-            </a>
-        </div>
     </header>
 
     <div id="filters">
@@ -70,4 +85,5 @@
     <script type="module" src="app.js"></script>
 </body>
 </html>
+
 
