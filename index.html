@@ -5,9 +5,56 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PointDrops - Catálogo</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #222;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #000;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        #filters button {
+            margin: 5px;
+            padding: 10px;
+        }
+        #product-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 20px;
+        }
+        .product-item {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 200px;
+            position: relative;
+        }
+        .product-item img {
+            max-width: 100%;
+            height: auto;
+        }
+        .delete-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #add-form, #login, #logout-container, #admin-actions {
+            margin: 20px;
+            display: none;
+        }
+    </style>
 </head>
-    
 <body>
     <header>
         <h1>Bienvenido a PointDrops</h1>
@@ -38,10 +85,9 @@
         <button>Cerrar sesión</button>
     </div>
 
-    <div id="admin-actions" style="display: none;">
+    <div id="admin-actions">
         <button>Agregar producto</button>
     </div>
-
 
     <div id="add-form">
         <h3>Agregar nuevo producto</h3>
@@ -56,7 +102,6 @@
             <option value="gorras">Gorras</option>
             <option value="accesorios">Accesorios</option>
         </select><br>
-        <textarea id="product-description" placeholder="Descripción del producto" rows="3"></textarea><br>
         <input type="file" id="product-image"><br>
         <button>Guardar producto</button>
     </div>
@@ -65,4 +110,3 @@
     <script type="module" src="app.js"></script>
 </body>
 </html>
-
