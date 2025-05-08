@@ -7,14 +7,16 @@ const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 let allProducts = [];
 let isAdmin = false;
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     document.querySelector('#login button').addEventListener('click', login);
     document.querySelector('#logout-container button').addEventListener('click', logout);
     document.querySelector('#admin-actions button').addEventListener('click', showAddProductForm);
     document.querySelector('#add-form button').addEventListener('click', addProduct);
-    fetchProducts();
-    checkAdmin();
+
+    await checkAdmin(); // Esperar a saber si es admin o no
+    fetchProducts();    // Ahora sí renderizamos productos con isAdmin correcto
 });
+
 
 async function fetchProducts() {
     const { data, error } = await supabase.from('productos').select('*');
@@ -185,11 +187,16 @@ async function checkAdmin() {
     if (user && user.email === adminEmail) {
         isAdmin = true;
         document.getElementById('admin-actions').style.display = 'block';
+        document.getElementById('logout-container').style.display = 'block';
+        document.getElementById('login').style.display = 'none';
     } else {
         isAdmin = false;
+        document.getElementById('admin-actions').style.display = 'none';
+        document.getElementById('logout-container').style.display = 'none';
+        document.getElementById('login').style.display = 'block';
     }
-    fetchProducts();
 }
+
 
 window.filterByCategory = filterByCategory;
 
