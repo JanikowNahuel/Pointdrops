@@ -5,57 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>PointDrops</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://kit.fontawesome.com/a2e0e6ad01.js" crossorigin="anonymous"></script> <!-- íconos -->
+    <script src="https://kit.fontawesome.com/a2e0e6ad01.js" crossorigin="anonymous"></script>
 </head>
 <body>
-
-<header>
-    <div>
+    <header>
         <h1>Bienvenido a PointDrops</h1>
         <p>Acá tenés el catálogo. Para cotización y consultas comunicarse por WhatsApp/Instagram</p>
+        <div id="social-icons">
+            <a href="https://wa.me/5493516113270" target="_blank" title="WhatsApp">
+                <i class="fab fa-whatsapp"></i>
+            </a>
+            <a href="https://www.instagram.com/pointdrops" target="_blank" title="Instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+        </div>
+    </header>
+
+    <div id="filters">
+        <button onclick="filterByCategory('todas')">Todas</button>
+        <button onclick="filterByCategory('remeras')">Remeras</button>
+        <button onclick="filterByCategory('pantalones largos')">Pantalones largos</button>
+        <button onclick="filterByCategory('pantalones cortos')">Pantalones cortos</button>
+        <button onclick="filterByCategory('hoodies')">Hoodies</button>
+        <button onclick="filterByCategory('camperas')">Camperas</button>
+        <button onclick="filterByCategory('gorras')">Gorras</button>
+        <button onclick="filterByCategory('accesorios')">Accesorios</button>
     </div>
-    <div class="social-icons">
-        <a href="https://wa.me/5493516113270" target="_blank" title="WhatsApp">
-            <i class="fab fa-whatsapp"></i>
-        </a>
-        <a href="https://www.instagram.com/pointdrops" target="_blank" title="Instagram">
-            <i class="fab fa-instagram"></i>
-        </a>
-    </div>
-</header>
 
-<div id="categoryButtons">
-    <button onclick="filterByCategory('todas')">Todas</button>
-    <button onclick="filterByCategory('remeras')">Remeras</button>
-    <button onclick="filterByCategory('pantalones largos')">Pantalones largos</button>
-    <button onclick="filterByCategory('pantalones cortos')">Pantalones cortos</button>
-    <button onclick="filterByCategory('hoodies')">Hoodies</button>
-    <button onclick="filterByCategory('camperas')">Camperas</button>
-    <button onclick="filterByCategory('gorras')">Gorras</button>
-    <button onclick="filterByCategory('accesorios')">Accesorios</button>
-</div>
+    <div id="product-list"></div>
 
-<main>
-    <div id="productsContainer"></div>
-
-    <div id="loginForm" style="display: block;">
+    <div id="login" style="display:block;">
         <h3>Iniciar sesión como administrador</h3>
-        <input type="email" id="login-email" placeholder="Email" />
-        <input type="password" id="login-password" placeholder="Contraseña" />
-        <button id="login-btn">Iniciar sesión</button>
+        <input type="email" id="login-email" placeholder="Email"><br>
+        <input type="password" id="login-password" placeholder="Contraseña"><br>
+        <button>Iniciar sesión</button>
     </div>
 
-    <div id="logout-container" style="display: none;">
-        <button id="logout-btn">Cerrar sesión</button>
+    <div id="logout-container">
+        <button>Cerrar sesión</button>
     </div>
 
-    <div id="admin-actions" style="display: none;">
-        <button id="toggle-add-form">Agregar producto</button>
+    <div id="admin-actions">
+        <button>Agregar producto</button>
     </div>
 
-    <div id="add-form" style="display: none;">
+    <div id="add-form">
         <h3>Agregar nuevo producto</h3>
-        <input type="text" id="product-name" placeholder="Nombre del producto" /><br>
+        <input type="text" id="product-name" placeholder="Nombre del producto"><br>
         <select id="product-category">
             <option value="">Seleccionar categoría</option>
             <option value="remeras">Remeras</option>
@@ -67,11 +63,11 @@
             <option value="accesorios">Accesorios</option>
         </select><br>
         <input type="file" id="product-image"><br>
-        <button id="save-product-btn">Guardar producto</button>
+        <button>Guardar producto</button>
     </div>
-</main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-<script type="module" src="app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script type="module" src="app.js"></script>
 </body>
 </html>
+
