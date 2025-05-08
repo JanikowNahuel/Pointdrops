@@ -33,7 +33,6 @@ function renderProducts(products) {
         div.className = 'product-item';
         div.innerHTML = `
             <h3>${p.nombre}</h3>
-            <p>${p.categoria}</p>
             ${p.imagen ? `<img src="${p.imagen}" alt="${p.nombre}">` : ''}
             ${isAdmin ? `<button class="delete-btn" data-id="${p.id}">X</button>` : ''}
         `;
@@ -191,3 +190,6 @@ async function checkAdmin() {
     }
     fetchProducts();
 }
+
+window.filterByCategory = filterByCategory;
+
