@@ -233,33 +233,4 @@ button:hover {
     }
 }
 
-.hero {
-    width: 100%;
-    background: linear-gradient(to right, #e0e0e0, #f5f5f5),
-                url('c:/users/administrator/downloads/logo.jpg'); /* Cambia esto por la ruta de tu logo */
-    background-size: cover;
-    background-position: center;
-    color: var(--dark-text);
-    padding: 40px 0;
-    text-align: center;
-    margin-bottom: 30px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    position: relative;
-}
-
-.hero:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.3); /* Fondo oscuro para el desvanecimiento */
-    z-index: 0; /* Asegura que el fondo quede detrás del texto */
-}
-
-.hero h1, .hero p {
-    position: relative;
-    z-index: 1; /* Asegura que el texto quede por encima del fondo */
-}
 
