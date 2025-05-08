@@ -201,6 +201,10 @@ async function checkAdmin() {
     }
 }
 
+document.getElementById('category-select').addEventListener('change', (e) => {
+    filterByCategory(e.target.value);
+});
+
 
 window.filterByCategory = filterByCategory;
 
