@@ -3,35 +3,54 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f0f0f0;
+    background-color: #f3f3f3;
     color: #333;
 }
 
 header {
     text-align: center;
-    background-color: #ffffff;
+    background-color: #fff;
     padding: 20px;
     border-bottom: 1px solid #ddd;
     border-radius: 0 0 12px 12px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    position: relative;
+}
+
+.social-icons {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+}
+
+.social-icons a {
+    margin: 0 5px;
+    font-size: 20px;
+    color: #333;
+    transition: color 0.3s;
+}
+
+.social-icons a:hover {
+    color: #0077cc;
 }
 
 #filters {
-    text-align: center;
-    margin: 20px 10px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
+    margin: 20px;
 }
 
 #filters button {
     padding: 10px 15px;
-    background-color: #fff;
+    background-color: #f9f9f9;
+    color: #333;
     border: 1px solid #ccc;
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
+    min-width: 120px;
 }
 
 #filters button:hover {
@@ -42,10 +61,10 @@ header {
 
 #product-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
     padding: 20px;
-    max-width: 1000px;
+    max-width: 1200px;
     margin: auto;
 }
 
@@ -57,6 +76,7 @@ header {
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     animation: fadeIn 0.5s ease-in;
+    position: relative;
 }
 
 .product-card:hover {
@@ -68,6 +88,20 @@ header {
     width: 100%;
     border-radius: 8px;
     margin-top: 10px;
+}
+
+/* Botón eliminar */
+.product-card .delete-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
 }
 
 /* FadeIn animation */
@@ -84,19 +118,17 @@ header {
 
 /* Formularios y admin */
 #add-form, #login, #logout-container, #admin-actions {
-    margin: 20px;
+    margin: 20px auto;
     background-color: #fff;
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     max-width: 400px;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 input[type="text"], input[type="email"], input[type="password"], select {
     width: 100%;
-    padding: 8px;
+    padding: 10px;
     margin: 8px 0;
     border-radius: 8px;
     border: 1px solid #ccc;
@@ -123,11 +155,17 @@ button:hover {
         grid-template-columns: repeat(2, 1fr);
         padding: 10px;
     }
+
+    .social-icons {
+        position: static;
+        margin-top: 10px;
+    }
 }
 
 @media (max-width: 480px) {
     #filters {
         flex-direction: column;
+        align-items: center;
     }
 
     #product-list {
@@ -138,3 +176,4 @@ button:hover {
         font-size: 14px;
     }
 }
+
