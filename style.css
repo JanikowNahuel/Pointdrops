@@ -191,3 +191,33 @@ button:hover {
     font-size: 1rem;
     color: #333;
 }
+
+
+/* Responsive: 4 productos por fila en pantallas medianas */
+@media (max-width: 1200px) {
+    #product-list {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Responsive: 3 productos por fila en pantallas más chicas */
+@media (max-width: 900px) {
+    #product-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Responsive: 2 productos por fila en celulares grandes */
+@media (max-width: 600px) {
+    #product-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Responsive: 1 producto por fila en celulares chicos */
+@media (max-width: 400px) {
+    #product-list {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
