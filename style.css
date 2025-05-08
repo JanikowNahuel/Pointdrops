@@ -235,11 +235,12 @@ button:hover {
 
 
 .footer {
-    background: linear-gradient(to right, #dbe9ff, #e8f2ff);
-    padding: 20px 0;
+    background: linear-gradient(to top, #e3f2fd, #f5f5f5);
+    padding: 30px 20px;
     text-align: center;
-    margin-top: 60px;
-    border-top: 1px solid #ccc;
+    font-size: 0.9rem;
+    color: #333;
+    margin-top: 50px;
 }
 
 .footer-content {
@@ -254,19 +255,21 @@ button:hover {
     font-size: 0.9rem;
 }
 
-.social-icons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
+
+.footer .social-icons a {
+    margin: 0 10px;
+    display: inline-block;
 }
 
-.social-icons a img {
+.footer .social-icons a img {
     width: 28px;
     height: 28px;
+    max-width: 100%;
+    object-fit: contain;
     transition: transform 0.3s ease, filter 0.3s ease;
-    filter: grayscale(100%) brightness(0.5);
+    filter: grayscale(100%) brightness(0.6);
 }
+
 
 .social-icons a:hover img {
     transform: scale(1.2);
