@@ -1,110 +1,61 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <title>PointDrops - Catálogo</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #222;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: #000;
-            color: #fff;
-            padding: 20px;
-            text-align: center;
-        }
-        #filters button {
-            margin: 5px;
-            padding: 10px;
-        }
-        #product-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            padding: 20px;
-        }
-        .product-item {
-            background-color: #fff;
-            border: 1px solid #ccc;
-            padding: 10px;
-            width: 200px;
-            position: relative;
-        }
-        .product-item img {
-            max-width: 100%;
-            height: auto;
-        }
-        .delete-btn {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: red;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        #add-form, #login, #logout-container, #admin-actions {
-            margin: 20px;
-            display: none;
-        }
-    </style>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>PointDrops</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/a2e0e6ad01.js" crossorigin="anonymous"></script> <!-- íconos -->
 </head>
 <body>
-    <header>
+
+<header>
+    <div>
         <h1>Bienvenido a PointDrops</h1>
         <p>Acá tenés el catálogo. Para cotización y consultas comunicarse por WhatsApp/Instagram</p>
-        <div id="social-icons">
-            <a href="https://wa.me/5493516113270" target="_blank" title="WhatsApp">
-              <i class="fab fa-whatsapp"></i>
-            </a>
-            <a href="https://www.instagram.com/pointdrops" target="_blank" title="Instagram">
-              <i class="fab fa-instagram"></i>
-            </a>
-        </div>
-
-    </header>
-
-    <div id="filters">
-        <button onclick="filterByCategory('todas')">Todas</button>
-        <button onclick="filterByCategory('remeras')">Remeras</button>
-        <button onclick="filterByCategory('pantalones largos')">Pantalones largos</button>
-        <button onclick="filterByCategory('pantalones cortos')">Pantalones cortos</button>
-        <button onclick="filterByCategory('hoodies')">Hoodies</button>
-        <button onclick="filterByCategory('camperas')">Camperas</button>
-        <button onclick="filterByCategory('gorras')">Gorras</button>
-        <button onclick="filterByCategory('accesorios')">Accesorios</button>
     </div>
+    <div class="social-icons">
+        <a href="https://wa.me/5493516113270" target="_blank" title="WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="https://www.instagram.com/pointdrops" target="_blank" title="Instagram">
+            <i class="fab fa-instagram"></i>
+        </a>
+    </div>
+</header>
 
-    <div id="product-list"></div>
+<div id="categoryButtons">
+    <button onclick="filterByCategory('todas')">Todas</button>
+    <button onclick="filterByCategory('remeras')">Remeras</button>
+    <button onclick="filterByCategory('pantalones largos')">Pantalones largos</button>
+    <button onclick="filterByCategory('pantalones cortos')">Pantalones cortos</button>
+    <button onclick="filterByCategory('hoodies')">Hoodies</button>
+    <button onclick="filterByCategory('camperas')">Camperas</button>
+    <button onclick="filterByCategory('gorras')">Gorras</button>
+    <button onclick="filterByCategory('accesorios')">Accesorios</button>
+</div>
 
-    <div id="login" style="display:block;">
+<main>
+    <div id="productsContainer"></div>
+
+    <div id="loginForm" style="display: block;">
         <h3>Iniciar sesión como administrador</h3>
-        <input type="email" id="login-email" placeholder="Email"><br>
-        <input type="password" id="login-password" placeholder="Contraseña"><br>
-        <button>Iniciar sesión</button>
+        <input type="email" id="login-email" placeholder="Email" />
+        <input type="password" id="login-password" placeholder="Contraseña" />
+        <button id="login-btn">Iniciar sesión</button>
     </div>
 
-    <div id="logout-container">
-        <button>Cerrar sesión</button>
+    <div id="logout-container" style="display: none;">
+        <button id="logout-btn">Cerrar sesión</button>
     </div>
 
-    <div id="admin-actions">
-        <button>Agregar producto</button>
+    <div id="admin-actions" style="display: none;">
+        <button id="toggle-add-form">Agregar producto</button>
     </div>
 
-    <div id="add-form">
+    <div id="add-form" style="display: none;">
         <h3>Agregar nuevo producto</h3>
-        <input type="text" id="product-name" placeholder="Nombre del producto"><br>
+        <input type="text" id="product-name" placeholder="Nombre del producto" /><br>
         <select id="product-category">
             <option value="">Seleccionar categoría</option>
             <option value="remeras">Remeras</option>
@@ -116,10 +67,11 @@
             <option value="accesorios">Accesorios</option>
         </select><br>
         <input type="file" id="product-image"><br>
-        <button>Guardar producto</button>
+        <button id="save-product-btn">Guardar producto</button>
     </div>
+</main>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-    <script type="module" src="app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script type="module" src="app.js"></script>
 </body>
 </html>
