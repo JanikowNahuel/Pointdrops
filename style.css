@@ -234,3 +234,43 @@ button:hover {
 }
 
 
+.footer {
+    background: linear-gradient(to right, #dbe9ff, #e8f2ff);
+    padding: 20px 0;
+    text-align: center;
+    margin-top: 60px;
+    border-top: 1px solid #ccc;
+}
+
+.footer-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 10px 20px;
+    color: #333;
+}
+
+.footer-content p {
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.social-icons a img {
+    width: 28px;
+    height: 28px;
+    transition: transform 0.3s ease, filter 0.3s ease;
+    filter: grayscale(100%) brightness(0.5);
+}
+
+.social-icons a:hover img {
+    transform: scale(1.2);
+    filter: grayscale(0%) brightness(1.2);
+}
+
+
