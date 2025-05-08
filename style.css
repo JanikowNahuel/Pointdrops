@@ -175,14 +175,7 @@ button:hover {
     font-family: inherit;
 }
 
-header {
-    background-color: #000;
-    color: white;
-    text-align: center;
-    padding: 20px 10px;
-    margin-bottom: 20px;
-    border-radius: 0 0 10px 10px;
-}
+
 
 .hero {
     background: linear-gradient(to right, #0f0f0f, #1a1a1a);
