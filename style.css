@@ -32,11 +32,18 @@ header p {
 
 /* Filtros */
 #filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
+    text-align: center;
     margin-bottom: 20px;
+}
+
+#category-select {
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    background-color: #fff;
+    color: #333;
+    max-width: 250px;
 }
 
 #filters button {
