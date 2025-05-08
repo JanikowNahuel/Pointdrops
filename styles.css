@@ -1,0 +1,40 @@
+.product-item {
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    padding: 16px;
+    background-color: white;
+    text-align: center;
+    max-width: 240px;
+    margin: 16px auto;
+    overflow: hidden;
+    transition: transform 0.2s;
+}
+
+.product-item:hover {
+    transform: translateY(-4px);
+}
+
+.product-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.separator {
+    height: 1px;
+    margin: 12px 0;
+    background: linear-gradient(to right, transparent, #ccc, transparent);
+}
+
+.product-item h3 {
+    margin: 8px 0 4px;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.product-item .descripcion {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 8px;
+}
+
