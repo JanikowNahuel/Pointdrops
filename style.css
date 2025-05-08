@@ -56,8 +56,8 @@ header p {
 /* Lista de productos */
 #product-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
     padding: 10px;
 }
 
@@ -66,15 +66,17 @@ header p {
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    padding: 15px;
+    padding: 10px;
     text-align: center;
     position: relative;
+    max-width: 100%;
 }
 
 .product-item img {
     max-width: 100%;
-    border-radius: 10px;
-    margin-bottom: 10px;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 8px;
 }
 
 .separator {
@@ -84,14 +86,12 @@ header p {
 }
 
 .product-item h3 {
-    font-size: 1.1rem;
+    font-size: 1rem;
     margin-bottom: 5px;
-    color: #0d47a1;
 }
 
 .descripcion {
-    font-size: 0.9rem;
-    color: #555;
+    font-size: 0.85rem;
 }
 
 /* Botón de eliminar */
