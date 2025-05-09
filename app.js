@@ -156,6 +156,68 @@ async function deleteProduct(id) {
     }
 }
 
+let currentEditId = null;
+
+document.addEventListener('click', async (e) => {
+    if (e.target.classList.contains('edit-btn')) {
+        const id = e.target.dataset.id;
+        currentEditId = id;
+
+        const { data: producto } = await supabase.from('productos').select('*').eq('id', id).single();
+        document.getElementById('edit-name').value = producto.nombre;
+        document.getElementById('edit-category').value = producto.categoria;
+        document.getElementById('edit-image-preview').src = producto.imagen;
+        document.getElementById('edit-image-preview').style.display = 'block';
+
+        document.getElementById('edit-form').style.display = 'block';
+    }
+});
+
+async function saveEdit() {
+    const nombre = document.getElementById('edit-name').value;
+    const categoria = document.getElementById('edit-category').value;
+    const fileInput = document.getElementById('edit-image');
+    const file = fileInput.files[0];
+    let imagenUrl = null;
+
+    if (file) {
+        const filePath = `${Date.now()}_${file.name}`;
+        const { error: uploadError } = await supabase.storage.from('productos').upload(filePath, file);
+        if (uploadError) return alert('Error al subir imagen: ' + uploadError.message);
+
+        const { data: { publicUrl } } = supabase.storage.from('productos').getPublicUrl(filePath);
+        imagenUrl = publicUrl;
+    }
+
+    const updateData = {
+        nombre,
+        categoria
+    };
+
+    if (imagenUrl) {
+        updateData.imagen = imagenUrl;
+    }
+
+    const { error } = await supabase.from('productos').update(updateData).eq('id', currentEditId);
+
+    if (error) {
+        alert('Error al actualizar producto: ' + error.message);
+    } else {
+        alert('Producto actualizado');
+        document.getElementById('edit-form').style.display = 'none';
+        fetchProducts();
+    }
+}
+
+
+
+
+
+
+
+
+
+
 
 
 async function login() {
