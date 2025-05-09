@@ -64,16 +64,31 @@ function filterByCategory(categoria) {
 
 function showAddProductForm() {
     document.getElementById('add-form').style.display = 'block';
+    document.getElementById("brand-select").addEventListener("change", loadProducts);
+
 }
 
 async function addProduct() {
     const descripcion = document.getElementById('product-description').value;
     const nombre = document.getElementById('product-name').value;
-    const categoria = document.getElementById('product-category').value;
+    const selectedCategory = document.getElementById("category-select").value;
+    const selectedBrand = document.getElementById("brand-select").value;
+
+    let query = supabase.from("productos").select("*");
+
+    if (selectedCategory !== "all") {
+    query = query.eq("categoria", selectedCategory);
+    }
+    if (selectedBrand !== "all") {
+    query = query.eq("marca", selectedBrand);
+    }
+
+    const { data, error } = await query;
+
     const fileInput = document.getElementById('product-image');
     const file = fileInput.files[0];
 
-    if (!nombre || !categoria || !file) {
+    if (!nombre || !file) {
         return alert('Completa todos los campos y selecciona una imagen');
     }
 
@@ -201,9 +216,7 @@ async function checkAdmin() {
     }
 }
 
-document.getElementById('category-select').addEventListener('change', (e) => {
-    filterByCategory(e.target.value);
-});
+
 
 
 window.filterByCategory = filterByCategory;
