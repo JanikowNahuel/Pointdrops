@@ -37,7 +37,6 @@ function renderProducts(products) {
             ${p.imagen ? `<img src="${p.imagen}" alt="${p.nombre}">` : ''}
             <div class="separator"></div>
             <h3>${p.nombre}</h3>
-            <p class="descripcion">${p.descripcion || ''}</p>
             ${isAdmin ? `<button class="delete-btn" data-id="${p.id}">X</button>` : ''}
             
         `;
@@ -67,7 +66,6 @@ function showAddProductForm() {
 }
 
 async function addProduct() {
-    const descripcion = document.getElementById('product-description').value;
     const nombre = document.getElementById('product-name').value;
     const categoria = document.getElementById('product-category').value;
     const fileInput = document.getElementById('product-image');
