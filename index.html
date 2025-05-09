@@ -64,11 +64,10 @@
             <option value="accesorios">Accesorios</option>
             <option value="conjuntos">Conjuntos</option>
         </select><br>
-        <input type="file" id="product-image"><br>
         <label for="product-image">Imagen:</label>
-        <div id="drop-zone">
-          <p>Arrastrá una imagen aquí o hacé clic para seleccionarla</p>
-          <input type="file" id="product-image" accept="image/*" hidden>
+        <div id="drop-zone" style="border: 2px dashed #ccc; padding: 20px; text-align: center; cursor: pointer;">
+           Arrastrá y soltá la imagen aquí o hacé clic para seleccionarla
+          <input type="file" id="product-image" accept="image/*" style="display: none;">
         </div>
         <img id="image-preview" style="max-width: 100%; margin-top: 10px; display: none;" />
 
