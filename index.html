@@ -76,6 +76,24 @@
         <button>Guardar producto</button>
     </div>
 
+    <!-- Formulario de Edición de Producto -->
+    <div id="edit-form" style="display: none;">
+       <h2>Editar Producto</h2>
+       <input type="text" id="edit-product-name" placeholder="Nombre del Producto">
+       <select id="edit-product-category">
+         <option value="remera">Remera</option>
+         <option value="pantalon">Pantalón</option>
+         <!-- Aquí deben aparecer todas las categorías definidas en tu código -->
+       </select>
+       <div id="drop-zone-edit">
+          <span>Arrastra o selecciona una imagen</span>
+          <input type="file" id="edit-product-image" style="display: none;">
+       </div>
+       <img id="edit-image-preview" src="" alt="Vista previa" style="display:none;">
+       <button id="save-edit-btn">Guardar Cambios</button>
+    </div>
+
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <script type="module" src="app.js"></script>
 </body>
