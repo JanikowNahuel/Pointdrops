@@ -353,3 +353,52 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+
+function showEditForm(product) {
+  const editForm = document.createElement('div');
+  editForm.className = 'edit-form';
+
+  editForm.innerHTML = `
+    <h3>Editar Producto</h3>
+    <input type="text" id="edit-name" value="${product.nombre}">
+    <select id="edit-category">
+      <option value="remera" ${product.categoria === "remera" ? "selected" : ""}>Remera</option>
+      <option value="pantalon largo" ${product.categoria === "pantalon largo" ? "selected" : ""}>Pantalón Largo</option>
+      <option value="pantalon corto" ${product.categoria === "pantalon corto" ? "selected" : ""}>Pantalón Corto</option>
+      <option value="campera" ${product.categoria === "campera" ? "selected" : ""}>Campera</option>
+      <option value="buzo" ${product.categoria === "buzo" ? "selected" : ""}>Buzo</option>
+    </select>
+    <div class="edit-buttons">
+      <button id="save-edit">Guardar Cambios</button>
+      <button id="cancel-edit">Cancelar</button>
+    </div>
+  `;
+
+  document.body.appendChild(editForm);
+
+  // Botón guardar
+  document.getElementById('save-edit').addEventListener('click', async () => {
+    const updatedName = document.getElementById('edit-name').value;
+    const updatedCategory = document.getElementById('edit-category').value;
+
+    const { error } = await supabase
+      .from('productos')
+      .update({ nombre: updatedName, categoria: updatedCategory })
+      .eq('id', product.id);
+
+    if (error) {
+      alert('Error al guardar cambios: ' + error.message);
+    } else {
+      alert('Producto actualizado');
+      editForm.remove();
+      fetchProducts();
+    }
+  });
+
+  // Botón cancelar
+  document.getElementById('cancel-edit').addEventListener('click', () => {
+    editForm.remove();
+  });
+}
+
+
