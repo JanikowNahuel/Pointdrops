@@ -401,4 +401,6 @@ function showEditForm(product) {
   });
 }
 
+window.saveEdit = saveEdit;
+
 
