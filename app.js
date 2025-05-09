@@ -141,7 +141,6 @@ async function deleteProduct(id) {
     // Extraer la ruta relativa al bucket desde la URL pública
     const imagePath = imageUrl.split('/').slice(-1)[0];
 
-
     // Eliminar la imagen del bucket
     const { error: removeError } = await supabase.storage
         .from('productos')
@@ -178,10 +177,10 @@ async function editProduct(id) {
     }
 
     // Rellenar los campos del formulario con los datos actuales del producto
-    document.getElementById('edit-product-name').value = producto.nombre;
-    document.getElementById('edit-product-category').value = producto.categoria;
-    document.getElementById('edit-image-preview').src = producto.imagen;
-    document.getElementById('edit-image-preview').style.display = 'block';
+    document.getElementById('edit-form-product-name').value = producto.nombre;
+    document.getElementById('edit-form-product-category').value = producto.categoria;
+    document.getElementById('edit-form-image-preview').src = producto.imagen;
+    document.getElementById('edit-form-image-preview').style.display = 'block';
     
     // Mostrar el formulario de edición
     document.getElementById('edit-form').style.display = 'block';
@@ -191,9 +190,9 @@ async function editProduct(id) {
 }
 
 async function saveEditProduct(id) {
-    const nombre = document.getElementById('edit-product-name').value;
-    const categoria = document.getElementById('edit-product-category').value;
-    const fileInput = document.getElementById('edit-product-image');
+    const nombre = document.getElementById('edit-form-product-name').value;
+    const categoria = document.getElementById('edit-form-product-category').value;
+    const fileInput = document.getElementById('edit-form-product-image');
     const file = fileInput.files[0];
     let publicUrl = null;
 
@@ -225,7 +224,7 @@ async function saveEditProduct(id) {
 
     // Si no se selecciona una nueva imagen, usamos la imagen existente
     if (!publicUrl) {
-        publicUrl = document.getElementById('edit-image-preview').src;
+        publicUrl = document.getElementById('edit-form-image-preview').src;
     }
 
     // Actualizar el producto en la base de datos
@@ -242,8 +241,6 @@ async function saveEditProduct(id) {
         fetchProducts();  // Volver a cargar los productos
     }
 }
-
-
 
 async function login() {
     const email = document.getElementById('login-email').value;
@@ -291,7 +288,6 @@ document.getElementById('category-select').addEventListener('change', (e) => {
     filterByCategory(e.target.value);
 });
 
-
 window.filterByCategory = filterByCategory;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -337,49 +333,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-
 document.addEventListener('DOMContentLoaded', () => {
   const editDropZone = document.getElementById('edit-drop-zone');
-  const editImageInput = document.getElementById('edit-product-image');
-  const editImagePreview = document.getElementById('edit-image-preview');
-
-  if (editDropZone && editImageInput && editImagePreview) {
-    editDropZone.addEventListener('click', () => editImageInput.click());
-
-    editDropZone.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      editDropZone.classList.add('dragover');
-    });
-
-    editDropZone.addEventListener('dragleave', () => {
-      editDropZone.classList.remove('dragover');
-    });
-
-    editDropZone.addEventListener('drop', (e) => {
-      e.preventDefault();
-      editDropZone.classList.remove('dragover');
-      const file = e.dataTransfer.files[0];
-      if (file && file.type.startsWith('image/')) {
-        editImageInput.files = e.dataTransfer.files;
-        showEditPreview(file);
-      }
-    });
-
-    editImageInput.addEventListener('change', () => {
-      const file = editImageInput.files[0];
-      if (file && file.type.startsWith('image/')) {
-        showEditPreview(file);
-      }
-    });
-
-    function showEditPreview(file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        editImagePreview.src = e.target.result;
-        editImagePreview.style.display = 'block';
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-});
-
+  const editImageInput = document.getElementById('edit-form-product
