@@ -276,4 +276,21 @@ button:hover {
     filter: grayscale(0%) brightness(1.2);
 }
 
+#drop-zone {
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    color: #888;
+    background-color: #fafafa;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+#drop-zone.dragover {
+    border-color: var(--primary-color);
+    background-color: #e3f2fd;
+    color: var(--primary-color);
+}
+
 
