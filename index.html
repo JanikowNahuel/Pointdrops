@@ -29,7 +29,7 @@
           <option value="gorras">Gorras</option>
           <option value="accesorios">Accesorios</option>
           <option value="conjuntos">Conjuntos</option>
-          <option value="sneakers">Sneakers</option>
+          <option value="sneaker">Sneaker</option>
       </select>
     </div>
 
@@ -64,7 +64,7 @@
             <option value="gorras">Gorras</option>
             <option value="accesorios">Accesorios</option>
             <option value="conjuntos">Conjuntos</option>
-            <option value="sneakers">Sneakers</option>
+            <option value="sneaker">Sneaker</option>
         </select><br>
         <label for="product-image">Imagen:</label>
         <div id="drop-zone" style="border: 2px dashed #ccc; padding: 20px; text-align: center; cursor: pointer;">
@@ -76,46 +76,8 @@
         <button>Guardar producto</button>
     </div>
 
-    <div id="edit-form" style="display: none;">
-       <h3>Editar producto</h3>
-       <input type="text" id="edit-name" placeholder="Nombre del producto">
-
-       <label className="text-sm font-medium">Categoría</label>
-       <select
-             className="border rounded px-3 py-2 w-full"
-             value={editedProduct.category}
-             onChange={(e) =>
-             setEditedProduct({ ...editedProduct, category: e.target.value })
-        }
-       >
-            <option value="">Seleccionar categoría</option>
-            <option value="remeras">Remeras</option>
-            <option value="pantalones largos">Pantalones largos</option>
-            <option value="pantalones cortos">Pantalones cortos</option>
-            <option value="hoodies">Hoodies</option>
-            <option value="camperas">Camperas</option>
-            <option value="gorras">Gorras</option>
-            <option value="accesorios">Accesorios</option>
-            <option value="conjuntos">Conjuntos</option>
-            <option value="sneakers">Sneakers</option>
-           
-       </select>
-        
-
-        
-       <div id="edit-drop-zone" class="drop-zone">Arrastra una nueva imagen aquí o haz clic para seleccionar</div>
-       <input type="file" id="edit-image" accept="image/*" style="display: none;">
-       <img id="edit-image-preview" style="display:none; width:100%; margin-top:10px; border-radius:8px;" />
-
-       <button onclick="saveEdit()">Guardar cambios</button>
-    </div>
-
-
-    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <script type="module" src="app.js"></script>
-
-
 </body>
 
 <footer class="footer">
