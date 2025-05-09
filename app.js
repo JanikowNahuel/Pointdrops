@@ -36,32 +36,21 @@ function renderProducts(products) {
             ${p.imagen ? `<img src="${p.imagen}" alt="${p.nombre}">` : ''}
             <div class="separator"></div>
             <h3>${p.nombre}</h3>
-            ${isAdmin ? `
-                <button class="edit-btn" data-id="${p.id}">Editar</button>
-                <button class="delete-btn" data-id="${p.id}">X</button>` : ''
-            }
+            ${isAdmin ? `<button class="delete-btn" data-id="${p.id}">X</button>` : ''}
+            
         `;
         container.appendChild(div);
     });
 
     if (isAdmin) {
-        // Asignar la funcionalidad de edición y eliminación
-        document.querySelectorAll('.edit-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const id = btn.dataset.id;
-                editProduct(id);  // Llamar a la función editProduct
-            });
-        });
-
         document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const id = btn.dataset.id;
-                deleteProduct(id);  // Llamar a la función deleteProduct
+                deleteProduct(id);
             });
         });
     }
 }
-
 
 function filterByCategory(categoria) {
     if (categoria === 'todas') {
@@ -141,6 +130,7 @@ async function deleteProduct(id) {
     // Extraer la ruta relativa al bucket desde la URL pública
     const imagePath = imageUrl.split('/').slice(-1)[0];
 
+
     // Eliminar la imagen del bucket
     const { error: removeError } = await supabase.storage
         .from('productos')
@@ -164,83 +154,7 @@ async function deleteProduct(id) {
     }
 }
 
-async function editProduct(id) {
-    // Obtener el producto con el ID específico
-    const { data: producto, error: fetchError } = await supabase
-        .from('productos')
-        .select('*')
-        .eq('id', id)
-        .single();
 
-    if (fetchError) {
-        return alert('Error al obtener producto: ' + fetchError.message);
-    }
-
-    // Rellenar los campos del formulario con los datos actuales del producto
-    document.getElementById('edit-form-product-name').value = producto.nombre;
-    document.getElementById('edit-form-product-category').value = producto.categoria;
-    document.getElementById('edit-form-image-preview').src = producto.imagen;
-    document.getElementById('edit-form-image-preview').style.display = 'block';
-    
-    // Mostrar el formulario de edición
-    document.getElementById('edit-form').style.display = 'block';
-
-    // Al hacer clic en guardar cambios, se ejecutará la función saveEditProduct
-    document.getElementById('save-edit-btn').onclick = () => saveEditProduct(id);
-}
-
-async function saveEditProduct(id) {
-    const nombre = document.getElementById('edit-form-product-name').value;
-    const categoria = document.getElementById('edit-form-product-category').value;
-    const fileInput = document.getElementById('edit-form-product-image');
-    const file = fileInput.files[0];
-    let publicUrl = null;
-
-    if (!nombre || !categoria) {
-        return alert('Completa todos los campos');
-    }
-
-    // Si se selecciona una nueva imagen, la subimos
-    if (file) {
-        // Generar un nombre único para la nueva imagen
-        const filePath = `${Date.now()}_${file.name}`;
-
-        // Subir la nueva imagen al bucket
-        const { error: uploadError } = await supabase.storage
-            .from('productos')
-            .upload(filePath, file);
-
-        if (uploadError) {
-            return alert('Error al subir imagen: ' + uploadError.message);
-        }
-
-        // Obtener la URL pública de la imagen
-        const { data: { publicUrl: newPublicUrl } } = supabase.storage
-            .from('productos')
-            .getPublicUrl(filePath);
-
-        publicUrl = newPublicUrl;
-    }
-
-    // Si no se selecciona una nueva imagen, usamos la imagen existente
-    if (!publicUrl) {
-        publicUrl = document.getElementById('edit-form-image-preview').src;
-    }
-
-    // Actualizar el producto en la base de datos
-    const { error: updateError } = await supabase
-        .from('productos')
-        .update({ nombre, categoria, imagen: publicUrl })
-        .eq('id', id);
-
-    if (updateError) {
-        alert('Error al actualizar: ' + updateError.message);
-    } else {
-        alert('Producto actualizado');
-        document.getElementById('edit-form').style.display = 'none';  // Ocultar el formulario
-        fetchProducts();  // Volver a cargar los productos
-    }
-}
 
 async function login() {
     const email = document.getElementById('login-email').value;
@@ -288,6 +202,7 @@ document.getElementById('category-select').addEventListener('change', (e) => {
     filterByCategory(e.target.value);
 });
 
+
 window.filterByCategory = filterByCategory;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -332,7 +247,3 @@ document.addEventListener('DOMContentLoaded', () => {
     reader.readAsDataURL(file);
   }
 });
-
-document.addEventListener('DOMContentLoaded', () => {
-  const editDropZone = document.getElementById('edit-drop-zone');
-  const editImageInput = document.getElementById('edit-form-product
