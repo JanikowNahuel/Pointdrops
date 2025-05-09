@@ -19,19 +19,27 @@
        </div>
     </header>
 
-    <div id="filters">
-      <select id="category-select">
-          <option value="todas">Todas las categorías</option>
-          <option value="remeras">Remeras</option>
-          <option value="pantalones largos">Pantalones largos</option>
-          <option value="pantalones cortos">Pantalones cortos</option>
-          <option value="hoodies">Hoodies</option>
-          <option value="camperas">Camperas</option>
-          <option value="gorras">Gorras</option>
-          <option value="accesorios">Accesorios</option>
-      </select>
-    </div>
+<div id="filters">
+        <select id="category-select">
+            <option value="all">Todas las categorías</option>
+            <option value="remeras">Remeras</option>
+            <option value="pantalones">Pantalones</option>
+            <option value="buzos">Buzos</option>
+            <option value="camperas">Camperas</option>
+            <option value="accesorios">Accesorios</option>
+        </select>
 
+        <select id="brand-select">
+            <option value="all">Todas las marcas</option>
+            <option value="Denim Tears">Denim Tears</option>
+            <option value="Trapstar">Trapstar</option>
+            <option value="Corteiz">Corteiz</option>
+            <option value="Sp5der">Sp5der</option>
+            <option value="Bape">Bape</option>
+        </select>
+
+        <button id="clear-filters">Limpiar filtros</button>
+    </div>
 
     <div id="product-list"></div>
 
@@ -67,6 +75,7 @@
         <input type="file" id="product-image"><br>
         <button>Guardar producto</button>
     </div>
+    
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <script type="module" src="app.js"></script>
