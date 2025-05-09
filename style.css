@@ -292,17 +292,3 @@ button:hover {
     background-color: #e3f2fd;
     color: var(--primary-color);
 }
-
-.image-gallery {
-    display: flex;
-    gap: 10px;
-    overflow-x: auto;
-    margin-bottom: 10px;
-}
-
-.image-gallery img {
-    max-height: 150px;
-    border-radius: 8px;
-    object-fit: cover;
-}
-
