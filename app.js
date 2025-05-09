@@ -36,10 +36,8 @@ function renderProducts(products) {
             ${p.imagen ? `<img src="${p.imagen}" alt="${p.nombre}">` : ''}
             <div class="separator"></div>
             <h3>${p.nombre}</h3>
-            ${isAdmin ? `
-               <button class="delete-btn" data-id="${p.id}">X</button>
-               <button class="edit-btn" data-id="${p.id}">✏️</button>
-            ` : ''}
+            ${isAdmin ? `<button class="delete-btn" data-id="${p.id}">X</button>` : ''}
+            
         `;
         container.appendChild(div);
     });
@@ -156,68 +154,6 @@ async function deleteProduct(id) {
     }
 }
 
-let currentEditId = null;
-
-document.addEventListener('click', async (e) => {
-    if (e.target.classList.contains('edit-btn')) {
-        const id = e.target.dataset.id;
-        currentEditId = id;
-
-        const { data: producto } = await supabase.from('productos').select('*').eq('id', id).single();
-        document.getElementById('edit-name').value = producto.nombre;
-        document.getElementById('edit-category').value = producto.categoria;
-        document.getElementById('edit-image-preview').src = producto.imagen;
-        document.getElementById('edit-image-preview').style.display = 'block';
-
-        document.getElementById('edit-form').style.display = 'block';
-    }
-});
-
-async function saveEdit() {
-    const nombre = document.getElementById('edit-name').value;
-    const categoria = document.getElementById('edit-category').value;
-    const fileInput = document.getElementById('edit-image');
-    const file = fileInput.files[0];
-    let imagenUrl = null;
-
-    if (file) {
-        const filePath = `${Date.now()}_${file.name}`;
-        const { error: uploadError } = await supabase.storage.from('productos').upload(filePath, file);
-        if (uploadError) return alert('Error al subir imagen: ' + uploadError.message);
-
-        const { data: { publicUrl } } = supabase.storage.from('productos').getPublicUrl(filePath);
-        imagenUrl = publicUrl;
-    }
-
-    const updateData = {
-        nombre,
-        categoria
-    };
-
-    if (imagenUrl) {
-        updateData.imagen = imagenUrl;
-    }
-
-    const { error } = await supabase.from('productos').update(updateData).eq('id', currentEditId);
-
-    if (error) {
-        alert('Error al actualizar producto: ' + error.message);
-    } else {
-        alert('Producto actualizado');
-        document.getElementById('edit-form').style.display = 'none';
-        fetchProducts();
-    }
-}
-
-
-
-
-
-
-
-
-
-
 
 
 async function login() {
@@ -311,96 +247,4 @@ document.addEventListener('DOMContentLoaded', () => {
     reader.readAsDataURL(file);
   }
 });
-
-
-document.addEventListener('DOMContentLoaded', () => {
-  const dropZone = document.getElementById('edit-drop-zone');
-  const imageInput = document.getElementById('edit-image');
-  const imagePreview = document.getElementById('edit-image-preview');
-
-  dropZone.addEventListener('click', () => imageInput.click());
-  dropZone.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    dropZone.classList.add('dragover');
-  });
-  dropZone.addEventListener('dragleave', () => {
-    dropZone.classList.remove('dragover');
-  });
-  dropZone.addEventListener('drop', (e) => {
-    e.preventDefault();
-    dropZone.classList.remove('dragover');
-    const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('image/')) {
-      imageInput.files = e.dataTransfer.files;
-      showPreview(file);
-    }
-  });
-
-  imageInput.addEventListener('change', () => {
-    const file = imageInput.files[0];
-    if (file && file.type.startsWith('image/')) {
-      showPreview(file);
-    }
-  });
-
-  function showPreview(file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      imagePreview.src = e.target.result;
-      imagePreview.style.display = 'block';
-    };
-    reader.readAsDataURL(file);
-  }
-});
-
-
-function showEditForm(product) {
-  const editForm = document.createElement('div');
-  editForm.className = 'edit-form';
-
-  editForm.innerHTML = `
-    <h3>Editar Producto</h3>
-    <input type="text" id="edit-name" value="${product.nombre}">
-    <select id="edit-category">
-      <option value="remera" ${product.categoria === "remera" ? "selected" : ""}>Remera</option>
-      <option value="pantalon largo" ${product.categoria === "pantalon largo" ? "selected" : ""}>Pantalón Largo</option>
-      <option value="pantalon corto" ${product.categoria === "pantalon corto" ? "selected" : ""}>Pantalón Corto</option>
-      <option value="campera" ${product.categoria === "campera" ? "selected" : ""}>Campera</option>
-      <option value="buzo" ${product.categoria === "buzo" ? "selected" : ""}>Buzo</option>
-    </select>
-    <div class="edit-buttons">
-      <button id="save-edit">Guardar Cambios</button>
-      <button id="cancel-edit">Cancelar</button>
-    </div>
-  `;
-
-  document.body.appendChild(editForm);
-
-  // Botón guardar
-  document.getElementById('save-edit').addEventListener('click', async () => {
-    const updatedName = document.getElementById('edit-name').value;
-    const updatedCategory = document.getElementById('edit-category').value;
-
-    const { error } = await supabase
-      .from('productos')
-      .update({ nombre: updatedName, categoria: updatedCategory })
-      .eq('id', product.id);
-
-    if (error) {
-      alert('Error al guardar cambios: ' + error.message);
-    } else {
-      alert('Producto actualizado');
-      editForm.remove();
-      fetchProducts();
-    }
-  });
-
-  // Botón cancelar
-  document.getElementById('cancel-edit').addEventListener('click', () => {
-    editForm.remove();
-  });
-}
-
-window.saveEdit = saveEdit;
-
 
