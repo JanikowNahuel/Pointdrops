@@ -312,3 +312,44 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+
+document.addEventListener('DOMContentLoaded', () => {
+  const dropZone = document.getElementById('edit-drop-zone');
+  const imageInput = document.getElementById('edit-image');
+  const imagePreview = document.getElementById('edit-image-preview');
+
+  dropZone.addEventListener('click', () => imageInput.click());
+  dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('dragover');
+  });
+  dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('dragover');
+  });
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      imageInput.files = e.dataTransfer.files;
+      showPreview(file);
+    }
+  });
+
+  imageInput.addEventListener('change', () => {
+    const file = imageInput.files[0];
+    if (file && file.type.startsWith('image/')) {
+      showPreview(file);
+    }
+  });
+
+  function showPreview(file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      imagePreview.src = e.target.result;
+      imagePreview.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
