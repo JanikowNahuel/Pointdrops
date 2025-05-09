@@ -1,4 +1,3 @@
-
 const supabaseUrl = 'https://hifmffqdooihgotquxnd.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhpZm1mZnFkb29paGdvdHF1eG5kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY1OTAxMzQsImV4cCI6MjA2MjE2NjEzNH0.3nprN0B0wsXmpMFEaAbaZLLHvo3jUs4FwhZjkc4fxqo';
 const adminEmail = 'janikownahuel@gmail.com';
@@ -30,37 +29,16 @@ async function fetchProducts() {
 function renderProducts(products) {
     const container = document.getElementById('product-list');
     container.innerHTML = '';
-
     products.forEach(p => {
         const div = document.createElement('div');
         div.className = 'product-item';
-
-        // Parsear imagen (puede ser una sola string o un JSON array)
-        let imagenes = [];
-        try {
-            imagenes = JSON.parse(p.imagen);
-        } catch {
-            if (typeof p.imagen === 'string') {
-                imagenes = [p.imagen];
-            }
-        }
-
-        // Crear contenedor de galería
-        const gallery = document.createElement('div');
-        gallery.className = 'image-gallery';
-
-        imagenes.forEach((imgUrl, i) => {
-            const img = document.createElement('img');
-            img.src = imgUrl;
-            img.alt = p.nombre + ' ' + (i + 1);
-            gallery.appendChild(img);
-        });
-
         div.innerHTML = `
+            ${p.imagen ? `<img src="${p.imagen}" alt="${p.nombre}">` : ''}
+            <div class="separator"></div>
             <h3>${p.nombre}</h3>
             ${isAdmin ? `<button class="delete-btn" data-id="${p.id}">X</button>` : ''}
+            
         `;
-        div.insertBefore(gallery, div.firstChild);
         container.appendChild(div);
     });
 
@@ -73,7 +51,6 @@ function renderProducts(products) {
         });
     }
 }
-
 
 function filterByCategory(categoria) {
     if (categoria === 'todas') {
@@ -91,35 +68,34 @@ async function addProduct() {
     const nombre = document.getElementById('product-name').value;
     const categoria = document.getElementById('product-category').value;
     const fileInput = document.getElementById('product-image');
-    const files = fileInput.files;
+    const file = fileInput.files[0];
 
-    if (!nombre || !categoria || files.length === 0) {
-        return alert('Completa todos los campos y selecciona al menos una imagen');
+    if (!nombre || !categoria || !file) {
+        return alert('Completa todos los campos y selecciona una imagen');
     }
 
-    let imagenes = [];
+    // Generar un nombre único para la imagen
+    const filePath = `${Date.now()}_${file.name}`;
 
-    for (const file of files) {
-        const filePath = `${Date.now()}_${file.name}`;
-        const { error: uploadError } = await supabase.storage
-            .from('productos')
-            .upload(filePath, file);
 
-        if (uploadError) {
-            console.error('Error al subir imagen:', uploadError.message);
-            continue;
-        }
+    // Subir la imagen al bucket
+    const { error: uploadError } = await supabase.storage
+        .from('productos')
+        .upload(filePath, file);
 
-        const { data: { publicUrl } } = supabase.storage
-            .from('productos')
-            .getPublicUrl(filePath);
-
-        imagenes.push(publicUrl);
+    if (uploadError) {
+        return alert('Error al subir imagen: ' + uploadError.message);
     }
 
+    // Obtener la URL pública de la imagen
+    const { data: { publicUrl } } = supabase.storage
+        .from('productos')
+        .getPublicUrl(filePath);
+
+    // Guardar los datos del producto incluyendo la imagen
     const { error: insertError } = await supabase
         .from('productos')
-        .insert({ nombre, categoria, imagen: JSON.stringify(imagenes) });
+        .insert({ nombre, categoria, imagen: publicUrl });
 
     if (insertError) {
         alert('Error al agregar: ' + insertError.message);
@@ -129,7 +105,6 @@ async function addProduct() {
         fetchProducts();
     }
 }
-
 
 
 async function deleteProduct(id) {
