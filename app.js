@@ -30,16 +30,37 @@ async function fetchProducts() {
 function renderProducts(products) {
     const container = document.getElementById('product-list');
     container.innerHTML = '';
+
     products.forEach(p => {
         const div = document.createElement('div');
         div.className = 'product-item';
+
+        // Parsear imagen (puede ser una sola string o un JSON array)
+        let imagenes = [];
+        try {
+            imagenes = JSON.parse(p.imagen);
+        } catch {
+            if (typeof p.imagen === 'string') {
+                imagenes = [p.imagen];
+            }
+        }
+
+        // Crear contenedor de galería
+        const gallery = document.createElement('div');
+        gallery.className = 'image-gallery';
+
+        imagenes.forEach((imgUrl, i) => {
+            const img = document.createElement('img');
+            img.src = imgUrl;
+            img.alt = p.nombre + ' ' + (i + 1);
+            gallery.appendChild(img);
+        });
+
         div.innerHTML = `
-            ${p.imagen ? `<img src="${p.imagen}" alt="${p.nombre}">` : ''}
-            <div class="separator"></div>
             <h3>${p.nombre}</h3>
             ${isAdmin ? `<button class="delete-btn" data-id="${p.id}">X</button>` : ''}
-            
         `;
+        div.insertBefore(gallery, div.firstChild);
         container.appendChild(div);
     });
 
@@ -52,6 +73,7 @@ function renderProducts(products) {
         });
     }
 }
+
 
 function filterByCategory(categoria) {
     if (categoria === 'todas') {
