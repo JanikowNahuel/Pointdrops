@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -19,27 +18,19 @@
        </div>
     </header>
 
-<div id="filters">
-        <select id="category-select">
-            <option value="all">Todas las categorías</option>
-            <option value="remeras">Remeras</option>
-            <option value="pantalones">Pantalones</option>
-            <option value="buzos">Buzos</option>
-            <option value="camperas">Camperas</option>
-            <option value="accesorios">Accesorios</option>
-        </select>
-
-        <select id="brand-select">
-            <option value="all">Todas las marcas</option>
-            <option value="Denim Tears">Denim Tears</option>
-            <option value="Trapstar">Trapstar</option>
-            <option value="Corteiz">Corteiz</option>
-            <option value="Sp5der">Sp5der</option>
-            <option value="Bape">Bape</option>
-        </select>
-
-        <button id="clear-filters">Limpiar filtros</button>
+    <div id="filters">
+      <select id="category-select">
+          <option value="todas">Todas las categorías</option>
+          <option value="remeras">Remeras</option>
+          <option value="pantalones largos">Pantalones largos</option>
+          <option value="pantalones cortos">Pantalones cortos</option>
+          <option value="hoodies">Hoodies</option>
+          <option value="camperas">Camperas</option>
+          <option value="gorras">Gorras</option>
+          <option value="accesorios">Accesorios</option>
+      </select>
     </div>
+
 
     <div id="product-list"></div>
 
@@ -75,34 +66,8 @@
         <input type="file" id="product-image"><br>
         <button>Guardar producto</button>
     </div>
-    
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <script type="module" src="app.js"></script>
 </body>
-
-<footer class="footer">
-    <div class="footer-content">
-        <p>&copy; 2025 PointDrops. Todos los derechos reservados.</p>
-        <div class="social-icons">
-            <a href="mailto:janikownahuel@gmail.com" target="_blank" title="Gmail" aria-label="Gmail">
-                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/gmail.svg" alt="Gmail">
-            </a>
-            <a href="https://wa.me/5493516113270" target="_blank" title="WhatsApp directo" aria-label="WhatsApp Directo">
-                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/whatsapp.svg" alt="WhatsApp">
-            </a>
-            <a href="https://chat.whatsapp.com/CWiNvWLXm4DBfczPbBfgsr" target="_blank" title="Comunidad de WhatsApp" aria-label="WhatsApp Comunidad">
-                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/whatsapp.svg" alt="WhatsApp Comunidad">
-            </a>
-            <a href="https://www.instagram.com/pointdrops/" target="_blank" title="Instagram" aria-label="Instagram">
-                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/instagram.svg" alt="Instagram">
-            </a>
-            <a href="https://www.tiktok.com/@pointdrops" target="_blank" title="TikTok" aria-label="TikTok">
-                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/tiktok.svg" alt="TikTok">
-            </a>
-        </div>
-    </div>
-</footer>
-
-
 </html>
