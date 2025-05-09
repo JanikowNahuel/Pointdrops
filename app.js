@@ -337,3 +337,49 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+
+document.addEventListener('DOMContentLoaded', () => {
+  const editDropZone = document.getElementById('edit-drop-zone');
+  const editImageInput = document.getElementById('edit-product-image');
+  const editImagePreview = document.getElementById('edit-image-preview');
+
+  if (editDropZone && editImageInput && editImagePreview) {
+    editDropZone.addEventListener('click', () => editImageInput.click());
+
+    editDropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      editDropZone.classList.add('dragover');
+    });
+
+    editDropZone.addEventListener('dragleave', () => {
+      editDropZone.classList.remove('dragover');
+    });
+
+    editDropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      editDropZone.classList.remove('dragover');
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith('image/')) {
+        editImageInput.files = e.dataTransfer.files;
+        showEditPreview(file);
+      }
+    });
+
+    editImageInput.addEventListener('change', () => {
+      const file = editImageInput.files[0];
+      if (file && file.type.startsWith('image/')) {
+        showEditPreview(file);
+      }
+    });
+
+    function showEditPreview(file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        editImagePreview.src = e.target.result;
+        editImagePreview.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+});
+
