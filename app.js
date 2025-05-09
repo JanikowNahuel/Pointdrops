@@ -36,8 +36,10 @@ function renderProducts(products) {
             ${p.imagen ? `<img src="${p.imagen}" alt="${p.nombre}">` : ''}
             <div class="separator"></div>
             <h3>${p.nombre}</h3>
-            ${isAdmin ? `<button class="delete-btn" data-id="${p.id}">X</button>` : ''}
-            
+            ${isAdmin ? `
+               <button class="delete-btn" data-id="${p.id}">X</button>
+               <button class="edit-btn" data-id="${p.id}">✏️</button>
+            ` : ''}
         `;
         container.appendChild(div);
     });
