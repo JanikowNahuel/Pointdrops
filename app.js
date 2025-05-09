@@ -69,34 +69,35 @@ async function addProduct() {
     const nombre = document.getElementById('product-name').value;
     const categoria = document.getElementById('product-category').value;
     const fileInput = document.getElementById('product-image');
-    const file = fileInput.files[0];
+    const files = fileInput.files;
 
-    if (!nombre || !categoria || !file) {
-        return alert('Completa todos los campos y selecciona una imagen');
+    if (!nombre || !categoria || files.length === 0) {
+        return alert('Completa todos los campos y selecciona al menos una imagen');
     }
 
-    // Generar un nombre único para la imagen
-    const filePath = `${Date.now()}_${file.name}`;
+    let imagenes = [];
 
+    for (const file of files) {
+        const filePath = `${Date.now()}_${file.name}`;
+        const { error: uploadError } = await supabase.storage
+            .from('productos')
+            .upload(filePath, file);
 
-    // Subir la imagen al bucket
-    const { error: uploadError } = await supabase.storage
-        .from('productos')
-        .upload(filePath, file);
+        if (uploadError) {
+            console.error('Error al subir imagen:', uploadError.message);
+            continue;
+        }
 
-    if (uploadError) {
-        return alert('Error al subir imagen: ' + uploadError.message);
+        const { data: { publicUrl } } = supabase.storage
+            .from('productos')
+            .getPublicUrl(filePath);
+
+        imagenes.push(publicUrl);
     }
 
-    // Obtener la URL pública de la imagen
-    const { data: { publicUrl } } = supabase.storage
-        .from('productos')
-        .getPublicUrl(filePath);
-
-    // Guardar los datos del producto incluyendo la imagen
     const { error: insertError } = await supabase
         .from('productos')
-        .insert({ nombre, categoria, imagen: publicUrl });
+        .insert({ nombre, categoria, imagen: JSON.stringify(imagenes) });
 
     if (insertError) {
         alert('Error al agregar: ' + insertError.message);
@@ -106,6 +107,7 @@ async function addProduct() {
         fetchProducts();
     }
 }
+
 
 
 async function deleteProduct(id) {
