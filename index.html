@@ -54,7 +54,7 @@
     <div id="add-form">
         <h3>Agregar nuevo producto</h3>
         <input type="text" id="product-name" placeholder="Nombre del producto"><br>
-        <select id="edit-product-category">
+        <select id="product-category">
             <option value="">Seleccionar categoría</option>
             <option value="remeras">Remeras</option>
             <option value="pantalones largos">Pantalones largos</option>
@@ -67,40 +67,14 @@
             <option value="sneaker">Sneaker</option>
         </select><br>
         <label for="product-image">Imagen:</label>
-        <div id="edit-drop-zone" style="border: 2px dashed #ccc; padding: 20px; text-align: center; cursor: pointer;">
+        <div id="drop-zone" style="border: 2px dashed #ccc; padding: 20px; text-align: center; cursor: pointer;">
              Arrastrá y soltá la imagen aquí o hacé clic para seleccionarla
-             <input type="file" id="edit-product-image" style="display: none;">
+             <input type="file" id="product-image" accept="image/*" style="display: none;">
         </div>
         <img id="image-preview" style="max-width: 100%; margin-top: 10px; display: none;" />
 
         <button>Guardar producto</button>
     </div>
-
-<!-- Formulario de Edición de Producto -->
-<div id="edit-form" style="display: none;">
-   <h2>Editar Producto</h2>
-   <input type="text" id="edit-form-product-name" placeholder="Nombre del Producto">
-   <select id="edit-form-product-category">
-      <option value="todas">Todas las categorías</option>
-      <option value="remeras">Remeras</option>
-      <option value="pantalones largos">Pantalones largos</option>
-      <option value="pantalones cortos">Pantalones cortos</option>
-      <option value="hoodies">Hoodies</option>
-      <option value="camperas">Camperas</option>
-      <option value="gorras">Gorras</option>
-      <option value="accesorios">Accesorios</option>
-      <option value="conjuntos">Conjuntos</option>
-      <option value="sneaker">Sneaker</option>
-   </select>
-   <div id="edit-form-drop-zone">
-      <span>Arrastra o selecciona una imagen</span>
-      <input type="file" id="edit-form-product-image" style="display: none;">
-   </div>
-   <img id="edit-form-image-preview" src="" alt="Vista previa" style="display:none;">
-   <button id="save-edit-btn">Guardar Cambios</button>
-</div>
-
-
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <script type="module" src="app.js"></script>
