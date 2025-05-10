@@ -293,17 +293,18 @@ button:hover {
     color: var(--primary-color);
 }
 
-
 .reminder {
-    background-color: #fff8e1;
-    color: #5d4037;
-    border-left: 6px solid #ffc107;
-    padding: 15px 20px;
-    margin-top: 20px;
+    background-color: #fffde7; /* amarillo claro */
+    color: #795548; /* marrón suave */
+    border-left: 6px solid #ffeb3b;
+    padding: 20px;
+    margin: 20px auto; /* centrado */
+    max-width: 800px; /* límite para no ocupar todo el ancho */
     font-size: 0.95rem;
     border-radius: 10px;
-    text-align: left;
-    line-height: 1.5;
+    text-align: center;
+    line-height: 1.6;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 
