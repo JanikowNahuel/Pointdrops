@@ -369,8 +369,8 @@ button:hover {
 }
 
 /* Fila de logos arriba */
-.header-contenedor::before,
-.header-contenedor::after {
+.hero-content::before,
+.hero-content::after {
   content: "";
   display: block;
   height: 60px; /* altura de la fila de logos */
@@ -384,16 +384,16 @@ button:hover {
   z-index: 0;
 }
 
-.header-contenedor::before {
+.hero-content::before {
   top: 0;
 }
 
-.header-contenedor::after {
+.hero-content::after {
   bottom: 0;
 }
 
 /* Asegura que el contenido esté por encima */
-.header-contenedor > * {
+.hero-content > * {
   position: relative;
   z-index: 1;
 }
