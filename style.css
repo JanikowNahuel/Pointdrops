@@ -358,17 +358,16 @@ button:hover {
 }
 
 
-.hero-content {
+
+.header-contenedor {
   position: relative;
   text-align: center;
   padding: 40px;
-  background-image: url('https://i.ibb.co/Q7t2mJqD/logo.jpg'); /* Reemplazá con la ruta real */
-  background-repeat: no-repeat;
+  background-image: url('https://i.ibb.co/Q7t2mJqD/logo.jpg'); /* Reemplazá con tu ruta */
+  background-repeat: repeat-x;
   background-position: center;
-  background-size: 250px; /* Ajustalo como quieras */
-  background-blend-mode: lighten;
-  background-color: rgba(255, 255, 255, 0.8); /* Suave superposición opcional */
-  border-radius: 12px;
+  background-size: 150px auto; /* Ajustá el ancho del logo según tu gusto */
+  opacity: 0.05; /* Muy desvanecido para no molestar el texto */
 }
 
 
