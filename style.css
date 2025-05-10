@@ -363,7 +363,7 @@ button:hover {
   position: relative;
   text-align: center;
   padding: 40px;
-  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA...'); /* (Reemplazá por tu logo en base64 o ruta relativa) */
+  background-image: url('https://i.ibb.co/Q7t2mJqD/logo.jpg'); /* (Reemplazá por tu logo en base64 o ruta relativa) */
   background-repeat: repeat-x;
   background-position: center;
   background-size: 80px auto;  /* Reducimos el tamaño del logo */
@@ -371,4 +371,4 @@ button:hover {
 }
 
 
-https://i.ibb.co/Q7t2mJqD/logo.jpg
+
