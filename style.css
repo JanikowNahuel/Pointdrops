@@ -354,6 +354,21 @@ button:hover {
 .reminder,
 .whatsapp-reminder {
     animation: fadeSlideIn 0.8s ease-out;
+    
+}
+
+
+.header-content {
+  position: relative;
+  text-align: center;
+  padding: 40px;
+  background-image: url('https://i.ibb.co/Q7t2mJqD/logo.jpg'); /* Reemplazá con la ruta real */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 250px; /* Ajustalo como quieras */
+  background-blend-mode: lighten;
+  background-color: rgba(255, 255, 255, 0.8); /* Suave superposición opcional */
+  border-radius: 12px;
 }
 
 
