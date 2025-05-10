@@ -305,3 +305,37 @@ button:hover {
     text-align: left;
     line-height: 1.5;
 }
+
+
+.whatsapp-reminder {
+    background-color: #e8f5e9; /* verde claro */
+    color: #1b5e20; /* verde oscuro */
+    border-left: 6px solid #66bb6a;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 800px;
+    font-size: 0.95rem;
+    border-radius: 10px;
+    text-align: center;
+    line-height: 1.6;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.whatsapp-reminder img.logo-wpp {
+    width: 28px;
+    vertical-align: middle;
+    margin-left: 6px;
+    transition: transform 0.2s;
+}
+
+.whatsapp-reminder img.logo-wpp:hover {
+    transform: scale(1.2);
+}
+
+.whatsapp-reminder .preview-img {
+    margin-top: 15px;
+    max-width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
