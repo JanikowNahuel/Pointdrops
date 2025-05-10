@@ -359,16 +359,42 @@ button:hover {
 
 
 
+
 .hero-content {
   position: relative;
   text-align: center;
   padding: 40px;
-  background-image: url('https://i.ibb.co/Q7t2mJqD/logo.jpg'); /* (Reemplazá por tu logo en base64 o ruta relativa) */
-  background-repeat: repeat-x;
-  background-position: center;
-  background-size: 80px auto;  /* Reducimos el tamaño del logo */
-  background-blend-mode: lighten;
+  background: linear-gradient(to right, #e2e2e2, #f8f8f8);
+  overflow: hidden;
 }
 
+/* Fila de logos arriba */
+.header-contenedor::before,
+.header-contenedor::after {
+  content: "";
+  display: block;
+  height: 60px; /* altura de la fila de logos */
+  background-image: url('https://i.ibb.co/Q7t2mJqD/logo.jpg');
+  background-repeat: repeat-x;
+  background-size: 60px auto;
+  opacity: 0.08;
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 0;
+}
 
+.header-contenedor::before {
+  top: 0;
+}
+
+.header-contenedor::after {
+  bottom: 0;
+}
+
+/* Asegura que el contenido esté por encima */
+.header-contenedor > * {
+  position: relative;
+  z-index: 1;
+}
 
