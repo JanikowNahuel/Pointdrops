@@ -295,3 +295,14 @@ button:hover {
 
 
 
+.reminder {
+    background-color: #fff8e1;
+    color: #5d4037;
+    border-left: 6px solid #ffc107;
+    padding: 15px 20px;
+    margin-top: 20px;
+    font-size: 0.95rem;
+    border-radius: 10px;
+    text-align: left;
+    line-height: 1.5;
+}
