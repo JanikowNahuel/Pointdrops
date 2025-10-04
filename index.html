@@ -4,141 +4,123 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PointDrops - Catálogo</title>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="style.css">
 </head>
+
+    
 <body>
-
-    <header class="hero">
+     <header class="hero">
         <div class="hero-content">
-            <h1>Bienvenido a PointDrops</h1>
-            <p>Catálogo - Para cotización y consultas, contáctanos por
-                <a href="https://wa.me/5493516113270" target="_blank" class="contact-link whatsapp">WhatsApp</a> o
-                <a href="https://instagram.com/pointdrops" target="_blank" class="contact-link instagram">Instagram</a>.
-            </p>
-            <ul class="reminder">
-                <li>📦 Esto es solo un Catálogo de ropa que podés pedir por encargo.</li>
-                <li>📸 Si te interesa alguna prenda me mandás captura y la cotizamos 💸.</li>
-                <li>👕 Todas las prendas vienen de talle 📏 S-XL, 👟 Sneakers también todos los talles.</li>
-                <li>🥷 Si querés ver lo que está en Stock eso lo encontrás en nuestro Instagram.</li>
-            </ul>
-        </div>
+             <h1>Bienvenido a PointDrops</h1>
+             <p>Catálogo - Para cotización y consultas, contáctanos por 
+               <a href="https://wa.me/5493516113270" target="_blank" style="color: #25D366; font-weight: bold; text-decoration: none;">WhatsApp</a> o 
+               <a href="https://instagram.com/pointdrops" target="_blank" style="color: #E1306C; font-weight: bold; text-decoration: none;">Instagram</a>.
+             <div class="reminder">
+                📦 Esto es solo un Catálogo de ropa que podés pedir por encargo. <br>
+                📸 Si te interesa alguna prenda me mandás captura y la cotizamos 💸. <br>
+                👕 Todas las prendas vienen de talle 📏 S-XL, 👟 Sneakers también todos los talles. <br>
+                🥷 Si querés ver lo que está en Stock eso lo encontrás en nuestro Instagram.
+             </div>
+        </div> 
     </header>
+    
+     <div class="whatsapp-reminder">
+        🚨 <strong>Recordá!</strong> Si te unís a nuestra Comunidad de WhatsApp tenés beneficios!!<br>
+        📉💰 Descuentos en todas las prendas.<br>
+        📦⏰ Podés ver los Drops con anticipación.<br>
+        👕🔥 Liquidaciones de prendas a precios increíbles!!<br><br>
+        <strong>UNITE GRATIS DESDE ACÁ</strong>
+        <a href="https://chat.whatsapp.com/CWiNvWLXm4DBfczPbBfgsr" target="_blank">
+           <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/whatsapp.svg" alt="WhatsApp" class="logo-wpp">
+        </a>
+        <br>
+        <img src="https://i.ibb.co/k6cdH9t6/Screenshot-371.png" alt="Vista previa comunidad" class="preview-img">
+     </div>
+    
+    <div id="filters">
+      <select id="category-select">
+          <option value="todas">Todas las categorías</option>
+          <option value="remeras">Remeras</option>
+          <option value="pantalones largos">Pantalones largos</option>
+          <option value="pantalones cortos">Pantalones cortos</option>
+          <option value="hoodies">Hoodies</option>
+          <option value="camperas">Camperas</option>
+          <option value="gorras">Gorras</option>
+          <option value="accesorios">Accesorios</option>
+          <option value="conjuntos">Conjuntos</option>
+          <option value="sneaker">Sneaker</option>
+      </select>
+    </div>
 
-    <main>
-        <aside class="whatsapp-reminder">
-            <h3>🚨 <strong>¡Recordá!</strong> Beneficios de nuestra Comunidad de WhatsApp:</h3>
-            <ul>
-                <li>📉💰 Descuentos en todas las prendas.</li>
-                <li>📦⏰ Podés ver los Drops con anticipación.</li>
-                <li>👕🔥 Liquidaciones de prendas a precios increíbles.</li>
-            </ul>
-            <strong>UNITE GRATIS DESDE ACÁ</strong>
-            <a href="https://chat.whatsapp.com/CWiNvWLXm4DBfczPbBfgsr" target="_blank">
-                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/whatsapp.svg" alt="WhatsApp" class="logo-wpp">
-            </a>
-            <img src="https://i.ibb.co/k6cdH9t6/Screenshot-371.png" alt="Vista previa comunidad" class="preview-img">
-        </aside>
 
-        <section class="catalog-section">
-            <div id="filters">
-                <select id="category-select">
-                    <option value="todas">Todas las categorías</option>
-                    <option value="remeras">Remeras</option>
-                    <option value="pantalones largos">Pantalones largos</option>
-                    <option value="pantalones cortos">Pantalones cortos</option>
-                    <option value="hoodies">Hoodies</option>
-                    <option value="camperas">Camperas</option>
-                    <option value="gorras">Gorras</option>
-                    <option value="accesorios">Accesorios</option>
-                    <option value="conjuntos">Conjuntos</option>
-                    <option value="sneaker">Sneaker</option>
-                </select>
-            </div>
-            <div id="product-list"></div>
-        </section>
+    <div id="product-list"></div>
 
-        <section class="admin-panel">
-            <form id="login" class="admin-form">
-                <h3>Iniciar sesión</h3>
-                <div class="form-group">
-                    <label for="login-email">Email:</label>
-                    <input type="email" id="login-email" placeholder="tu@email.com" required>
-                </div>
-                <div class="form-group">
-                    <label for="login-password">Contraseña:</label>
-                    <input type="password" id="login-password" placeholder="••••••••" required>
-                </div>
-                <button type="button" class="btn btn-block">Iniciar sesión</button>
-            </form>
+    <div id="login" style="display:block;">
+        <h3>Iniciar sesión como administrador</h3>
+        <input type="email" id="login-email" placeholder="Email"><br>
+        <input type="password" id="login-password" placeholder="Contraseña"><br>
+        <button>Iniciar sesión</button>
+    </div>
 
-            <div id="admin-actions-container" class="hidden">
-                <div id="admin-actions">
-                    <button class="btn">Agregar nuevo producto</button>
-                </div>
-                <div id="logout-container">
-                    <button class="btn btn-secondary btn-block">Cerrar sesión</button>
-                </div>
-            </div>
+    <div id="logout-container">
+        <button>Cerrar sesión</button>
+    </div>
 
-            <form id="add-form" class="admin-form hidden">
-                <h3>Agregar nuevo producto</h3>
-                <div class="form-group">
-                    <label for="product-name">Nombre del producto:</label>
-                    <input type="text" id="product-name" placeholder="Ej: Remera Tech" required>
-                </div>
-                <div class="form-group">
-                    <label for="product-category">Categoría:</label>
-                    <select id="product-category" required>
-                        <option value="">Seleccionar categoría</option>
-                        <option value="remeras">Remeras</option>
-                        <option value="pantalones largos">Pantalones largos</option>
-                        <option value="pantalones cortos">Pantalones cortos</option>
-                        <option value="hoodies">Hoodies</option>
-                        <option value="camperas">Camperas</option>
-                        <option value="gorras">Gorras</option>
-                        <option value="accesorios">Accesorios</option>
-                        <option value="conjuntos">Conjuntos</option>
-                        <option value="sneaker">Sneaker</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="product-image">Imagen:</label>
-                    <div id="drop-zone">
-                         Arrastrá y soltá la imagen aquí o hacé clic para seleccionarla
-                        <input type="file" id="product-image" accept="image/*" class="hidden">
-                    </div>
-                    <img id="image-preview" class="hidden" />
-                </div>
-                <button type="button" class="btn btn-block">Guardar producto</button>
-            </form>
-        </section>
-    </main>
+    <div id="admin-actions">
+        <button>Agregar producto</button>
+    </div>
 
-    <footer class="footer">
-        <div class="footer-content">
-            <p>&copy; 2025 PointDrops. Todos los derechos reservados.</p>
-            <div class="social-icons">
-                <a href="mailto:janikownahuel@gmail.com" target="_blank" title="Gmail" aria-label="Gmail">
-                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/gmail.svg" alt="Gmail">
-                </a>
-                <a href="https://wa.me/5493516113270" target="_blank" title="WhatsApp directo" aria-label="WhatsApp Directo">
-                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/whatsapp.svg" alt="WhatsApp">
-                </a>
-                <a href="https://chat.whatsapp.com/CWiNvWLXm4DBfczPbBfgsr" target="_blank" title="Comunidad de WhatsApp" aria-label="WhatsApp Comunidad">
-                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/whatsapp.svg" alt="WhatsApp Comunidad">
-                </a>
-                <a href="https://www.instagram.com/pointdrops/" target="_blank" title="Instagram" aria-label="Instagram">
-                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/instagram.svg" alt="Instagram">
-                </a>
-                <a href="https://www.tiktok.com/@pointdrops" target="_blank" title="TikTok" aria-label="TikTok">
-                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/tiktok.svg" alt="TikTok">
-                </a>
-            </div>
+    <div id="add-form">
+        <h3>Agregar nuevo producto</h3>
+        <input type="text" id="product-name" placeholder="Nombre del producto"><br>
+        <select id="product-category">
+            <option value="">Seleccionar categoría</option>
+            <option value="remeras">Remeras</option>
+            <option value="pantalones largos">Pantalones largos</option>
+            <option value="pantalones cortos">Pantalones cortos</option>
+            <option value="hoodies">Hoodies</option>
+            <option value="camperas">Camperas</option>
+            <option value="gorras">Gorras</option>
+            <option value="accesorios">Accesorios</option>
+            <option value="conjuntos">Conjuntos</option>
+            <option value="sneaker">Sneaker</option>
+        </select><br>
+        <label for="product-image">Imagen:</label>
+        <div id="drop-zone" style="border: 2px dashed #ccc; padding: 20px; text-align: center; cursor: pointer;">
+             Arrastrá y soltá la imagen aquí o hacé clic para seleccionarla
+             <input type="file" id="product-image" accept="image/*" style="display: none;">
         </div>
-    </footer>
+        <img id="image-preview" style="max-width: 100%; margin-top: 10px; display: none;" />
+
+        <button>Guardar producto</button>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <script type="module" src="app.js"></script>
 </body>
+
+<footer class="footer">
+    <div class="footer-content">
+        <p>&copy; 2025 PointDrops. Todos los derechos reservados.</p>
+        <div class="social-icons">
+            <a href="mailto:janikownahuel@gmail.com" target="_blank" title="Gmail" aria-label="Gmail">
+                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/gmail.svg" alt="Gmail">
+            </a>
+            <a href="https://wa.me/5493516113270" target="_blank" title="WhatsApp directo" aria-label="WhatsApp Directo">
+                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/whatsapp.svg" alt="WhatsApp">
+            </a>
+            <a href="https://chat.whatsapp.com/CWiNvWLXm4DBfczPbBfgsr" target="_blank" title="Comunidad de WhatsApp" aria-label="WhatsApp Comunidad">
+                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/whatsapp.svg" alt="WhatsApp Comunidad">
+            </a>
+            <a href="https://www.instagram.com/pointdrops/" target="_blank" title="Instagram" aria-label="Instagram">
+                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/instagram.svg" alt="Instagram">
+            </a>
+            <a href="https://www.tiktok.com/@pointdrops" target="_blank" title="TikTok" aria-label="TikTok">
+                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/tiktok.svg" alt="TikTok">
+            </a>
+        </div>
+    </div>
+</footer>
+
+
 </html>
