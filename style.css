@@ -144,12 +144,13 @@ body {
     box-shadow: var(--shadow);
 }
 
+/* Busca esto en tu style.css */
 .product-item img {
     width: 100%;
-    height: 250px;
+    aspect-ratio: 1 / 1; /* <-- AÑADE ESTA LÍNEA (para un cuadrado) */
     object-fit: cover;
     border-radius: 10px;
-    margin-bottom: 12px; /* Reemplaza al div.separator */
+    margin-bottom: 12px;
 }
 
 .product-item h3 {
@@ -310,3 +311,4 @@ input:focus, select:focus {
         transform: translateY(0);
     }
 }
+
