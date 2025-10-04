@@ -281,6 +281,10 @@ let slides = [
     'https://i.pinimg.com/736x/17/c6/19/17c619e21ef0ee24b4a42e68d960b567.jpg',
     'https://i.pinimg.com/736x/eb/4d/a3/eb4da30e8ae872ff29fd0b50e1101e1c.jpg',
     'https://i.pinimg.com/736x/78/84/f9/7884f91849c7a0c58221af5b378f31f6.jpg',
+    'https://i.pinimg.com/736x/72/33/ed/7233ed0c841b7dca4aa142ef364df8a5.jpg',
+    'https://i.pinimg.com/736x/1d/51/e3/1d51e31024993833398ece68dee270f4.jpg',
+    'https://i.pinimg.com/1200x/d9/ee/e0/d9eee0096061e734532ee3f1b526d83d.jpg',
+    'https://i.pinimg.com/736x/60/57/7b/60577b9c06e4dc374e1401331baa6bdf.jpg',
 ];
 let totalSlides = slides.length;
 let carouselInterval;
