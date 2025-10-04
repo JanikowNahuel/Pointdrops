@@ -3,248 +3,234 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const adminEmail = 'janikownahuel@gmail.com';
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
+// Estado de la aplicación
 let allProducts = [];
 let isAdmin = false;
 
-document.addEventListener('DOMContentLoaded', async () => {
-    document.querySelector('#login button').addEventListener('click', login);
-    document.querySelector('#logout-container button').addEventListener('click', logout);
-    document.querySelector('#admin-actions button').addEventListener('click', showAddProductForm);
-    document.querySelector('#add-form button').addEventListener('click', addProduct);
+// Elementos del DOM
+const loginForm = document.getElementById('login');
+const adminActionsContainer = document.getElementById('admin-actions-container');
+const addProductForm = document.getElementById('add-form');
+const productListContainer = document.getElementById('product-list');
 
-    await checkAdmin(); // Esperar a saber si es admin o no
-    fetchProducts();    // Ahora sí renderizamos productos con isAdmin correcto
+// --- INICIALIZACIÓN ---
+document.addEventListener('DOMContentLoaded', async () => {
+    setupEventListeners();
+    await checkAdminStatus();
+    fetchProducts();
 });
 
+function setupEventListeners() {
+    // Formularios y botones principales
+    loginForm.querySelector('button').addEventListener('click', handleLogin);
+    adminActionsContainer.querySelector('#logout-container button').addEventListener('click', handleLogout);
+    adminActionsContainer.querySelector('#admin-actions button').addEventListener('click', showAddProductForm);
+    addProductForm.querySelector('button').addEventListener('click', handleAddProduct);
 
+    // Filtro de categoría
+    document.getElementById('category-select').addEventListener('change', (e) => filterByCategory(e.target.value));
+
+    // Delegación de eventos para botones de eliminar
+    productListContainer.addEventListener('click', (e) => {
+        if (e.target && e.target.classList.contains('delete-btn')) {
+            const productItem = e.target.closest('.product-item');
+            if (productItem) {
+                const id = productItem.dataset.id;
+                const imagePath = productItem.dataset.imagePath;
+                handleDeleteProduct(id, imagePath);
+            }
+        }
+    });
+
+    // Funcionalidad de Drag & Drop para la imagen
+    setupDragAndDrop();
+}
+
+// --- RENDERIZADO Y MANEJO DE PRODUCTOS ---
 async function fetchProducts() {
     const { data, error } = await supabase.from('productos').select('*');
+    if (error) {
+        console.error('Error fetching products:', error);
+        return;
+    }
     if (data) {
         allProducts = data;
-        renderProducts(data);
+        renderProducts(allProducts);
     }
 }
 
-
 function renderProducts(products) {
-    const container = document.getElementById('product-list');
-    container.innerHTML = '';
+    productListContainer.innerHTML = ''; // Limpiar contenedor
     products.forEach(p => {
-        const div = document.createElement('div');
-        div.className = 'product-item';
-        div.innerHTML = `
-            ${p.imagen ? `<img src="${p.imagen}" alt="${p.nombre}">` : ''}
-            <div class="separator"></div>
-            <h3>${p.nombre}</h3>
-            ${isAdmin ? `<button class="delete-btn" data-id="${p.id}">X</button>` : ''}
-            
-        `;
-        container.appendChild(div);
-    });
+        // Extraer solo la parte final de la URL de la imagen para usar en la eliminación
+        const imagePath = p.imagen ? p.imagen.split('/').pop() : '';
 
-    if (isAdmin) {
-        document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const id = btn.dataset.id;
-                deleteProduct(id);
-            });
-        });
-    }
+        const productDiv = document.createElement('div');
+        productDiv.className = 'product-item';
+        productDiv.dataset.id = p.id;
+        productDiv.dataset.imagePath = imagePath; // Añadimos la ruta para no tener que consultarla luego
+
+        productDiv.innerHTML = `
+            ${p.imagen ? `<img src="${p.imagen}" alt="${p.nombre}">` : ''}
+            <h3>${p.nombre}</h3>
+            ${isAdmin ? `<button class="delete-btn" title="Eliminar producto">X</button>` : ''}
+        `;
+        productListContainer.appendChild(productDiv);
+    });
 }
 
 function filterByCategory(categoria) {
-    if (categoria === 'todas') {
-        renderProducts(allProducts);
+    const filteredProducts = categoria === 'todas'
+        ? allProducts
+        : allProducts.filter(p => p.categoria === categoria);
+    renderProducts(filteredProducts);
+}
+
+// --- AUTENTICACIÓN Y ESTADO DE ADMIN ---
+async function checkAdminStatus() {
+    const { data: { user } } = await supabase.auth.getUser();
+    isAdmin = user && user.email === adminEmail;
+    updateAdminUI();
+}
+
+function updateAdminUI() {
+    if (isAdmin) {
+        loginForm.classList.add('hidden');
+        adminActionsContainer.classList.remove('hidden');
     } else {
-        renderProducts(allProducts.filter(p => p.categoria === categoria));
+        loginForm.classList.remove('hidden');
+        adminActionsContainer.classList.add('hidden');
+        addProductForm.classList.add('hidden');
     }
+    // Volver a renderizar los productos para mostrar u ocultar los botones de eliminar
+    renderProducts(allProducts);
 }
 
-function showAddProductForm() {
-    document.getElementById('add-form').style.display = 'block';
-}
-
-async function addProduct() {
-    const nombre = document.getElementById('product-name').value;
-    const categoria = document.getElementById('product-category').value;
-    const fileInput = document.getElementById('product-image');
-    const file = fileInput.files[0];
-
-    if (!nombre || !categoria || !file) {
-        return alert('Completa todos los campos y selecciona una imagen');
-    }
-
-    // Generar un nombre único para la imagen
-    const filePath = `${Date.now()}_${file.name}`;
-
-
-    // Subir la imagen al bucket
-    const { error: uploadError } = await supabase.storage
-        .from('productos')
-        .upload(filePath, file);
-
-    if (uploadError) {
-        return alert('Error al subir imagen: ' + uploadError.message);
-    }
-
-    // Obtener la URL pública de la imagen
-    const { data: { publicUrl } } = supabase.storage
-        .from('productos')
-        .getPublicUrl(filePath);
-
-    // Guardar los datos del producto incluyendo la imagen
-    const { error: insertError } = await supabase
-        .from('productos')
-        .insert({ nombre, categoria, imagen: publicUrl });
-
-    if (insertError) {
-        alert('Error al agregar: ' + insertError.message);
-    } else {
-        alert('Producto agregado');
-        document.getElementById('add-form').style.display = 'none';
-        fetchProducts();
-    }
-}
-
-
-async function deleteProduct(id) {
-    if (!confirm('¿Eliminar este producto?')) return;
-
-    // Obtener el producto para conocer la URL de la imagen
-    const { data: producto, error: fetchError } = await supabase
-        .from('productos')
-        .select('imagen')
-        .eq('id', id)
-        .single();
-
-    if (fetchError) {
-        return alert('Error al obtener producto: ' + fetchError.message);
-    }
-
-    // Verificar que existe la imagen en el producto
-    const imageUrl = producto.imagen;
-    if (!imageUrl) {
-        return alert('No se encontró la imagen para eliminar');
-    }
-
-    // Extraer la ruta relativa al bucket desde la URL pública
-    const imagePath = imageUrl.split('/').slice(-1)[0];
-
-
-    // Eliminar la imagen del bucket
-    const { error: removeError } = await supabase.storage
-        .from('productos')
-        .remove([imagePath]);
-
-    if (removeError) {
-        return alert('Error al eliminar imagen: ' + removeError.message);
-    }
-
-    // Luego eliminar el producto de la base de datos
-    const { error: deleteError } = await supabase
-        .from('productos')
-        .delete()
-        .eq('id', id);
-
-    if (deleteError) {
-        alert('Error al eliminar producto: ' + deleteError.message);
-    } else {
-        alert('Producto eliminado y imagen eliminada del bucket');
-        fetchProducts();
-    }
-}
-
-
-
-async function login() {
+async function handleLogin() {
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
-
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
-        alert('Error: ' + error.message);
+        showNotification('Error', 'Email o contraseña incorrectos.', 'error');
     } else {
-        alert('Sesión iniciada');
-        document.getElementById('login').style.display = 'none';
-        document.getElementById('logout-container').style.display = 'block';
-        checkAdmin();
+        showNotification('¡Éxito!', 'Sesión iniciada correctamente.', 'success');
+        await checkAdminStatus();
     }
 }
 
-async function logout() {
+async function handleLogout() {
     await supabase.auth.signOut();
-    alert('Sesión cerrada');
-    document.getElementById('logout-container').style.display = 'none';
-    document.getElementById('admin-actions').style.display = 'none';
-    document.getElementById('add-form').style.display = 'none';
-    document.getElementById('login').style.display = 'block';
     isAdmin = false;
-    fetchProducts();
+    updateAdminUI();
+    showNotification('Sesión cerrada', '', 'info');
 }
 
-async function checkAdmin() {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user && user.email === adminEmail) {
-        isAdmin = true;
-        document.getElementById('admin-actions').style.display = 'block';
-        document.getElementById('logout-container').style.display = 'block';
-        document.getElementById('login').style.display = 'none';
+// --- ACCIONES DE ADMINISTRADOR (CRUD) ---
+function showAddProductForm() {
+    addProductForm.classList.toggle('hidden');
+}
+
+async function handleAddProduct() {
+    const nombre = document.getElementById('product-name').value;
+    const categoria = document.getElementById('product-category').value;
+    const file = document.getElementById('product-image').files[0];
+
+    if (!nombre || !categoria || !file) {
+        return showNotification('Campos incompletos', 'Por favor, completa todos los campos y selecciona una imagen.', 'warning');
+    }
+
+    const filePath = `${Date.now()}_${file.name}`;
+    const { error: uploadError } = await supabase.storage.from('productos').upload(filePath, file);
+
+    if (uploadError) {
+        return showNotification('Error de subida', uploadError.message, 'error');
+    }
+
+    const { data: { publicUrl } } = supabase.storage.from('productos').getPublicUrl(filePath);
+
+    const { error: insertError } = await supabase.from('productos').insert({ nombre, categoria, imagen: publicUrl });
+
+    if (insertError) {
+        showNotification('Error al guardar', insertError.message, 'error');
     } else {
-        isAdmin = false;
-        document.getElementById('admin-actions').style.display = 'none';
-        document.getElementById('logout-container').style.display = 'none';
-        document.getElementById('login').style.display = 'block';
+        showNotification('¡Producto agregado!', 'El nuevo producto ya está en el catálogo.', 'success');
+        addProductForm.classList.add('hidden');
+        addProductForm.reset();
+        document.getElementById('image-preview').classList.add('hidden');
+        fetchProducts();
     }
 }
 
-document.getElementById('category-select').addEventListener('change', (e) => {
-    filterByCategory(e.target.value);
-});
+function handleDeleteProduct(id, imagePath) {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "No podrás revertir esta acción.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, ¡eliminar!',
+        cancelButtonText: 'Cancelar'
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            // 1. Eliminar imagen del Storage (si existe)
+            if (imagePath) {
+                const { error: removeError } = await supabase.storage.from('productos').remove([imagePath]);
+                if (removeError) {
+                    return showNotification('Error al eliminar imagen', removeError.message, 'error');
+                }
+            }
+            // 2. Eliminar producto de la base de datos
+            const { error: deleteError } = await supabase.from('productos').delete().eq('id', id);
 
+            if (deleteError) {
+                showNotification('Error al eliminar producto', deleteError.message, 'error');
+            } else {
+                showNotification('Producto eliminado', 'El producto fue eliminado correctamente.', 'success');
+                fetchProducts(); // Actualizar la vista
+            }
+        }
+    });
+}
 
-window.filterByCategory = filterByCategory;
+// --- UTILIDADES ---
+function showNotification(title, text, icon) {
+    // Esta función usa SweetAlert2. Si no lo quieres, puedes reemplazarla por `alert(text)`.
+    Swal.fire({ title, text, icon, timer: 3000, timerProgressBar: true });
+}
 
-document.addEventListener('DOMContentLoaded', () => {
-  const dropZone = document.getElementById('drop-zone');
-  const imageInput = document.getElementById('product-image');
-  const imagePreview = document.getElementById('image-preview');
+function setupDragAndDrop() {
+    const dropZone = document.getElementById('drop-zone');
+    const imageInput = document.getElementById('product-image');
+    const imagePreview = document.getElementById('image-preview');
 
-  dropZone.addEventListener('click', () => imageInput.click());
+    dropZone.addEventListener('click', () => imageInput.click());
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+    });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) {
+            imageInput.files = e.dataTransfer.files;
+            showImagePreview(file);
+        }
+    });
+    imageInput.addEventListener('change', () => {
+        const file = imageInput.files[0];
+        if (file) showImagePreview(file);
+    });
 
-  dropZone.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    dropZone.classList.add('dragover');
-  });
-
-  dropZone.addEventListener('dragleave', () => {
-    dropZone.classList.remove('dragover');
-  });
-
-  dropZone.addEventListener('drop', (e) => {
-    e.preventDefault();
-    dropZone.classList.remove('dragover');
-    const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('image/')) {
-      imageInput.files = e.dataTransfer.files;
-      showPreview(file);
+    function showImagePreview(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            imagePreview.src = e.target.result;
+            imagePreview.classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
     }
-  });
-
-  imageInput.addEventListener('change', () => {
-    const file = imageInput.files[0];
-    if (file && file.type.startsWith('image/')) {
-      showPreview(file);
-    }
-  });
-
-  function showPreview(file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      imagePreview.src = e.target.result;
-      imagePreview.style.display = 'block';
-    };
-    reader.readAsDataURL(file);
-  }
-});
-
+}
