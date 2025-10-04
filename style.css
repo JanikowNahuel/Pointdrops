@@ -1,13 +1,19 @@
 /* --- Importación de Fuentes y Variables Globales --- */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&family=Roboto:wght@400;700&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/simple-icons@v10/font/simple-icons.min.css'); /* Para los íconos de redes sociales en el footer */
 
 :root {
-    --primary-color: #0d47a1;
-    --secondary-color: #6c757d;
+    --primary-color: #000; /* Negro para el nuevo estilo */
+    --secondary-color: #333; /* Gris oscuro para texto secundario */
+    --accent-color: #a0d1ff; /* Un azul claro/casi blanco para acentos */
     --light-bg: #f5f5f5;
     --dark-text: #111;
-    --body-font: 'Poppins', sans-serif;
-    --border-radius: 12px;
+    --white: #fff;
+
+    --header-font: 'Montserrat', sans-serif;
+    --body-font: 'Roboto', sans-serif;
+
+    --border-radius: 8px; /* Un poco más sutil */
     --shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
@@ -19,157 +25,425 @@
     font-family: var(--body-font);
 }
 
-html {
-    scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
     background-color: var(--light-bg);
     color: var(--dark-text);
 }
 
-/* --- Encabezado y Hero --- */
-.hero {
-    background: linear-gradient(to right, #e0e0e0, #f5f5f5);
-    color: var(--dark-text);
-    padding: 40px 20px;
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.hero h1 {
-    font-size: 2.8rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-}
-
-.hero p {
-    font-size: 1rem;
-    color: #333;
-    margin-bottom: 20px;
-}
-
-.contact-link {
-    font-weight: bold;
+a {
     text-decoration: none;
-    transition: opacity 0.2s;
+    color: inherit;
+    transition: color 0.2s;
 }
-.contact-link:hover { opacity: 0.8; }
-.contact-link.whatsapp { color: #25D366; }
-.contact-link.instagram { color: #E1306C; }
 
-/* --- Secciones de Avisos (Reminders) --- */
-.reminder, .whatsapp-reminder {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
+/* --- NUEVO HEADER (como la referencia) --- */
+.main-header {
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 15px 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    position: sticky; /* Sticky header para que se quede arriba al scrollear */
+    top: 0;
+    z-index: 1000;
+}
+
+.header-container {
+    max-width: 1400px; /* Ancho máximo para el contenido del header */
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.main-header .logo img {
+    height: 40px; /* Ajusta el tamaño de tu logo */
+    filter: invert(1); /* Si tu logo es oscuro y quieres que se vea blanco */
+}
+
+.main-nav ul {
+    list-style: none;
+    display: flex;
+    gap: 30px; /* Espacio entre los elementos de navegación */
+    margin: 0;
+}
+
+.main-nav a {
+    color: var(--white);
+    font-weight: 500;
     font-size: 0.95rem;
-    border-radius: var(--border-radius);
+    position: relative;
+}
+
+.main-nav a::after { /* Efecto de subrayado al hover */
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 0;
+    height: 2px;
+    background-color: var(--accent-color);
+    transition: width 0.3s ease-in-out;
+}
+
+.main-nav a:hover::after {
+    width: 100%;
+}
+
+.social-links-header {
+    display: flex;
+    gap: 20px;
+    font-size: 1.2rem;
+}
+
+.social-links-header a {
+    color: var(--white);
+    opacity: 0.7;
+}
+
+.social-links-header a:hover {
+    opacity: 1;
+    color: var(--accent-color); /* Color de acento al hover */
+}
+
+/* --- HERO SECTION (como la referencia) --- */
+.hero-section {
+    position: relative;
+    width: 100%;
+    height: 80vh; /* Ocupa la mayor parte de la pantalla */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Contenido a la izquierda */
+    color: var(--white);
     text-align: left;
-    line-height: 1.6;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    animation: fadeSlideIn 0.8s ease-out;
+    padding: 0 5%;
 }
 
-.reminder {
-    background-color: #fffde7;
-    color: #795548;
-    border-left: 6px solid #ffeb3b;
-    list-style-position: inside; /* Para que los bullets queden dentro */
+.hero-overlay { /* Un sutil oscurecimiento sobre la imagen de fondo */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1;
 }
 
+.hero-content-new {
+    position: relative;
+    z-index: 2;
+    max-width: 600px; /* Limita el ancho del texto */
+}
+
+.hero-title {
+    font-family: var(--header-font);
+    font-size: 4rem; /* Gran tamaño para el impacto */
+    font-weight: 900; /* Muy negrita */
+    line-height: 1.1;
+    margin-bottom: 20px;
+    animation: fadeInScale 1s ease-out forwards;
+}
+
+.hero-subtitle {
+    font-size: 1.3rem;
+    font-weight: 400;
+    margin-bottom: 40px;
+    animation: fadeInScale 1.2s ease-out forwards;
+    animation-delay: 0.2s;
+}
+
+/* --- BOTONES MODERNOS --- */
+.btn {
+    display: inline-block; /* Para que el padding y margin funcionen */
+    padding: 14px 30px;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    border: 2px solid transparent; /* Base para el outline */
+}
+
+.btn-primary {
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+    border-color: var(--accent-color);
+}
+.btn-primary:hover {
+    background-color: transparent;
+    color: var(--accent-color);
+}
+
+.btn-outline { /* Para el botón del hero */
+    background-color: transparent;
+    color: var(--white);
+    border-color: var(--white);
+    animation: fadeInScale 1.4s ease-out forwards;
+    animation-delay: 0.4s;
+}
+.btn-outline:hover {
+    background-color: var(--white);
+    color: var(--primary-color);
+}
+
+.btn-block { width: 100%; }
+
+.btn-secondary { /* Para el botón de cerrar sesión */
+    background-color: var(--secondary-color);
+    color: var(--white);
+    border-color: var(--secondary-color);
+}
+.btn-secondary:hover {
+    background-color: #444;
+    border-color: #444;
+}
+
+.btn-instagram {
+    background-color: #E1306C;
+    color: var(--white);
+    border-color: #E1306C;
+}
+.btn-instagram:hover {
+    background-color: transparent;
+    color: #E1306C;
+}
+.btn-instagram i { margin-right: 8px; }
+
+/* --- SECCIONES GENERALES --- */
+.wide-section {
+    padding: 80px 20px; /* Padding generoso para todas las secciones */
+    max-width: 1400px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.wide-section h2 {
+    font-family: var(--header-font);
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 50px;
+    position: relative;
+    display: inline-block;
+}
+.wide-section h2::after { /* Subrayado decorativo para títulos de sección */
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -15px;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background-color: var(--accent-color);
+    border-radius: 2px;
+}
+
+
+/* --- Bloque de Beneficios de la Comunidad de WhatsApp (Adaptado) --- */
 .whatsapp-reminder {
     background-color: #e8f5e9;
     color: #1b5e20;
     border-left: 6px solid #66bb6a;
     text-align: center;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 40px; /* Más padding */
+    margin-bottom: 80px; /* Más espacio entre secciones */
+}
+.whatsapp-reminder h3 {
+    font-family: var(--header-font);
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 25px;
+    color: #1b5e20;
 }
 .whatsapp-reminder ul {
     list-style-type: none;
     padding: 0;
+    margin: 0 auto 30px auto;
+    max-width: 600px;
+}
+.whatsapp-reminder ul li {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+.whatsapp-reminder strong {
+    display: block;
+    margin-top: 30px;
     margin-bottom: 15px;
+    font-size: 1.1rem;
 }
 .whatsapp-reminder .logo-wpp {
-    width: 28px;
+    width: 40px; /* Un poco más grande */
+    height: 40px;
     vertical-align: middle;
+    margin-left: 10px;
     transition: transform 0.2s;
 }
 .whatsapp-reminder .logo-wpp:hover { transform: scale(1.2); }
 .whatsapp-reminder .preview-img {
-    margin-top: 15px;
+    margin-top: 30px;
     max-width: 100%;
-    border-radius: 8px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* --- Nueva Sección: Instagram Promo --- */
+.instagram-promo {
+    background: linear-gradient(to right, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); /* Colores de Instagram */
+    color: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 60px;
+    margin-bottom: 80px;
+}
+.instagram-promo h2 {
+    color: var(--white); /* Título blanco */
+    margin-bottom: 30px;
+}
+.instagram-promo h2::after {
+    background-color: var(--white); /* Subrayado blanco */
+}
+.instagram-promo p {
+    font-size: 1.2rem;
+    margin-bottom: 40px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+.instagram-promo .btn-instagram {
+    font-size: 1.1rem;
+    padding: 15px 35px;
+}
+
+/* --- Nueva Sección: Carrusel de Outfits --- */
+.carousel-section {
+    margin-bottom: 80px;
+}
+.carousel-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    max-height: 600px; /* Altura máxima del carrusel */
+    display: flex; /* Para centrar imágenes */
+    align-items: center;
+    justify-content: center;
+    background-color: #eee;
+}
+
+.carousel-inner {
+    display: flex;
+    width: 100%;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-item {
+    min-width: 100%;
+    flex-shrink: 0; /* Asegura que no se encoja */
+    display: none; /* Por defecto oculto */
+    transition: opacity 0.8s ease-in-out;
+}
+.carousel-item.active {
+    display: block; /* Visible cuando está activo */
+    opacity: 1;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: auto; /* Altura automática */
+    max-height: 600px; /* Limita la altura para que no sea muy grande */
+    object-fit: contain; /* Para que la imagen se vea completa sin recorte */
+    object-position: center;
+    display: block; /* Elimina espacio extra debajo de la imagen */
+}
+
+.carousel-info {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #666;
 }
 
 /* --- Catálogo (Filtros y Grid de Productos) --- */
-#filters {
-    text-align: center;
-    margin-bottom: 30px;
+.catalog-section {
+    margin-bottom: 80px;
 }
-
+#filters {
+    margin-bottom: 50px;
+}
 #category-select {
-    padding: 10px 15px;
-    border-radius: 8px;
+    padding: 12px 20px;
+    border-radius: var(--border-radius);
     border: 1px solid #ccc;
-    font-size: 1rem;
+    font-size: 1.05rem;
     background-color: #fff;
-    max-width: 250px;
+    max-width: 300px;
     cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+#category-select:focus {
+    border-color: var(--accent-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(160, 209, 255, 0.4);
 }
 
 #product-list {
     display: grid;
-    /* La magia del grid fluido y adaptable */
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 25px;
-    padding: 0 20px;
-    max-width: 1600px;
-    margin: 0 auto 40px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Más grande para el nuevo estilo */
+    gap: 30px; /* Más espacio */
+    padding: 0; /* Ya no necesita padding, el wide-section lo da */
+    max-width: 100%; /* El contenedor padre ya maneja el ancho */
+    margin: 0 auto;
 }
 
 .product-item {
-    background-color: #fff;
-    border: 1px solid #ddd;
+    background-color: var(--white);
+    border: 1px solid #eee;
     border-radius: var(--border-radius);
-    padding: 14px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     text-align: center;
     position: relative;
-    /* Transición más suave */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .product-item:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow);
+    transform: translateY(-8px); /* Más levantado */
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15); /* Sombra más pronunciada */
 }
 
-/* Busca esto en tu style.css */
 .product-item img {
     width: 100%;
-    aspect-ratio: 1 / 1; /* <-- AÑADE ESTA LÍNEA (para un cuadrado) */
+    aspect-ratio: 1 / 1; /* Cuadrado perfecto */
     object-fit: cover;
-    border-radius: 10px;
-    margin-bottom: 12px;
+    border-radius: var(--border-radius);
+    margin-bottom: 15px;
+    background-color: #f9f9f9; /* Fondo claro para imágenes transparentes */
 }
 
 .product-item h3 {
-    margin: 0;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-weight: 500;
-    color: #333;
+    color: var(--dark-text);
+    margin: 0;
 }
 
 .delete-btn {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 15px;
+    right: 15px;
     background-color: crimson;
     color: white;
     border: none;
     border-radius: 50%;
-    width: 28px;
-    height: 28px;
+    width: 30px;
+    height: 30px;
     font-weight: bold;
     cursor: pointer;
     display: flex;
@@ -177,138 +451,182 @@ body {
     justify-content: center;
     padding-bottom: 2px;
     transition: background 0.3s, transform 0.3s;
+    font-size: 0.9rem;
 }
-
 .delete-btn:hover {
     background-color: darkred;
     transform: scale(1.1);
 }
 
-/* --- Panel de Administrador y Formularios --- */
-.admin-panel {
-    max-width: 450px;
-    margin: 40px auto;
-    padding: 0 20px;
+/* --- Sección de Administración --- */
+.admin-section {
+    margin-bottom: 80px;
 }
-
 .admin-form {
-    background-color: white;
-    padding: 25px;
+    max-width: 450px;
+    margin: 30px auto;
+    background-color: var(--white);
+    padding: 30px;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
-    margin-bottom: 20px;
 }
 .admin-form h3 {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     font-weight: 700;
+    color: var(--dark-text);
 }
 
 .form-group {
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 .form-group label {
     display: block;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     font-weight: 500;
-    color: #555;
+    color: var(--secondary-color);
 }
 
 input[type="text"], input[type="email"], input[type="password"], select {
     width: 100%;
     padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
     background-color: #fafafa;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
-
 input:focus, select:focus {
-    border-color: var(--primary-color);
+    border-color: var(--accent-color);
     outline: none;
-    box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.2);
+    box-shadow: 0 0 0 3px rgba(160, 209, 255, 0.4);
 }
 
-#admin-actions-container {
+.admin-actions-container {
+    max-width: 450px;
+    margin: 30px auto;
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
-
-
-/* --- Componentes de Botones --- */
-.btn {
-    width: auto;
-    padding: 12px 24px;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.2s;
-    font-size: 1rem;
-    font-weight: 500;
-    text-align: center;
+.admin-actions-container .btn {
+    margin-bottom: 0; /* Reset margen si lo hubiera */
 }
-.btn:hover {
-    background-color: #1565c0;
-    transform: translateY(-2px);
-}
-.btn-block { width: 100%; }
-.btn-secondary { background-color: var(--secondary-color); }
-.btn-secondary:hover { background-color: #5a6268; }
+.mb-3 { margin-bottom: 1rem; } /* Clase de utilidad para margen inferior */
 
 
 /* Drag and Drop Zone */
 #drop-zone {
-    border: 2px dashed #ccc;
-    border-radius: 10px;
-    padding: 30px;
+    border: 2px dashed #bbb;
+    border-radius: var(--border-radius);
+    padding: 40px;
     text-align: center;
     color: #888;
-    background-color: #fafafa;
+    background-color: #fcfcfc;
     cursor: pointer;
     transition: all 0.2s;
+    margin-top: 10px;
 }
 #drop-zone.dragover {
-    border-color: var(--primary-color);
+    border-color: var(--accent-color);
     background-color: #e3f2fd;
     color: var(--primary-color);
 }
 #image-preview {
     max-width: 100%;
-    margin-top: 15px;
-    border-radius: 8px;
+    height: 150px;
+    object-fit: contain;
+    margin-top: 20px;
+    border-radius: var(--border-radius);
+    border: 1px solid #eee;
+    background-color: #f0f0f0;
 }
 
-/* --- Footer --- */
+/* --- FOOTER --- */
 .footer {
-    background: #e0e0e0;
+    background-color: var(--primary-color);
+    color: #ccc;
     padding: 40px 20px;
     text-align: center;
-    color: #333;
-    margin-top: 50px;
 }
-.footer-content p { margin-bottom: 15px; }
-.footer .social-icons a { margin: 0 10px; }
+.footer-content p {
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+.footer .social-icons a {
+    margin: 0 12px;
+}
 .footer .social-icons img {
-    width: 28px;
-    height: 28px;
-    transition: transform 0.3s ease;
+    width: 32px; /* Más grande en el footer */
+    height: 32px;
+    filter: invert(1) grayscale(0.6); /* Iconos claros y un poco desaturados */
+    transition: transform 0.3s ease, filter 0.3s ease;
 }
-.footer .social-icons a:hover img { transform: scale(1.2); }
+.footer .social-icons a:hover img {
+    transform: scale(1.2);
+    filter: invert(1) grayscale(0); /* A todo color al hover */
+}
 
-/* --- Clases de Utilidad y Animaciones --- */
+/* --- CLASES DE UTILIDAD Y ANIMACIONES --- */
 .hidden { display: none !important; }
 
+@keyframes fadeInScale {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
 @keyframes fadeSlideIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- MEDIA QUERIES (Responsividad) --- */
+@media (max-width: 1024px) {
+    .main-nav { display: none; } /* Ocultar nav principal en pantallas más pequeñas */
+    .header-container { justify-content: center; } /* Centrar logo y social */
+
+    .hero-section {
+        height: 70vh;
+        justify-content: center;
+        text-align: center;
+        padding: 0 5%;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    .hero-content-new { max-width: 100%; }
+    .hero-title { font-size: 3rem; }
+    .hero-subtitle { font-size: 1.1rem; }
+
+    .wide-section h2 { font-size: 2rem; }
+}
+
+@media (max-width: 768px) {
+    .main-header { padding: 15px 20px; }
+    .header-container { flex-wrap: wrap; justify-content: center; gap: 15px; }
+    .main-header .logo { order: 1; }
+    .social-links-header { order: 2; width: 100%; text-align: center; }
+
+    .hero-section { height: 60vh; padding: 0 20px; }
+    .hero-title { font-size: 2.5rem; }
+    .hero-subtitle { font-size: 1rem; }
+
+    .whatsapp-reminder, .instagram-promo { padding: 30px; }
+    .whatsapp-reminder h3 { font-size: 1.5rem; }
+    .instagram-promo p { font-size: 1rem; }
+
+    #product-list { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .product-item img { aspect-ratio: 1 / 1; } /* Asegura el aspecto en mobile */
+}
+
+@media (max-width: 480px) {
+    .main-header .logo img { height: 35px; }
+    .social-links-header { gap: 15px; font-size: 1.1rem; }
+
+    .hero-section { height: 50vh; }
+    .hero-title { font-size: 2rem; margin-bottom: 15px; }
+    .hero-subtitle { font-size: 0.9rem; margin-bottom: 25px; }
+    .btn { padding: 12px 25px; font-size: 0.9rem; }
+
+    .wide-section { padding: 50px 15px; }
+    .wide-section h2 { font-size: 1.8rem; margin-bottom: 40px; }
+
+    .admin-form { padding: 20px; }
 }
 
