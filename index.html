@@ -6,41 +6,27 @@
     <title>PointDrops - Catálogo</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 
-    <header class="main-header">
-        <div class="header-container">
-            <div class="logo">
-                <a href="#hero-section">
-                    <img src="https://i.postimg.cc/HkNXtrN7/central-cee-trapstar-hd-wallpaper-preview.jpg" alt="PointDrops Logo"> </a>
-            </div>
-            <nav class="main-nav">
-                <ul>
-                    <li><a href="#catalog-section">Catálogo</a></li>
-                    <li><a href="#community-section">Comunidad</a></li>
-                    <li><a href="#instagram-section">Instagram</a></li>
-                    <li><a href="#admin-login-section">Admin</a></li>
-                </ul>
-            </nav>
-            <div class="social-links-header">
-                <a href="https://instagram.com/pointdrops" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                <a href="https://wa.me/5493516113270" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                </div>
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Bienvenido a PointDrops</h1>
+            <p>Catálogo - Para cotización y consultas, contáctanos por
+                <a href="https://wa.me/5493516113270" target="_blank" class="contact-link whatsapp">WhatsApp</a> o
+                <a href="https://instagram.com/pointdrops" target="_blank" class="contact-link instagram">Instagram</a>.
+            </p>
+            <ul class="reminder">
+                <li>📦 Esto es solo un Catálogo de ropa que podés pedir por encargo.</li>
+                <li>📸 Si te interesa alguna prenda me mandás captura y la cotizamos 💸.</li>
+                <li>👕 Todas las prendas vienen de talle 📏 S-XL, 👟 Sneakers también todos los talles.</li>
+                <li>🥷 Si querés ver lo que está en Stock eso lo encontrás en nuestro Instagram.</li>
+            </ul>
         </div>
     </header>
 
     <main>
-        <section class="hero-section" id="hero-section" style="background-image: url('https://i.postimg.cc/HkNXtrN7/central-cee-trapstar-hd-wallpaper-preview.jpg');"> <div class="hero-overlay"></div>
-            <div class="hero-content-new">
-                <h1 class="hero-title">DESTACA TU ESTILO, HASTA EL ÚLTIMO DETALLE.</h1>
-                <p class="hero-subtitle">Descubre las últimas tendencias y encuentra tu próximo outfit.</p>
-                <a href="#catalog-section" class="btn btn-primary btn-outline" id="view-catalog-btn">Ver Catálogo</a>
-            </div>
-        </section>
-
-        <aside class="whatsapp-reminder wide-section" id="community-section">
+        <aside class="whatsapp-reminder">
             <h3>🚨 <strong>¡Recordá!</strong> Beneficios de nuestra Comunidad de WhatsApp:</h3>
             <ul>
                 <li>📉💰 Descuentos en todas las prendas.</li>
@@ -54,27 +40,7 @@
             <img src="https://i.ibb.co/k6cdH9t6/Screenshot-371.png" alt="Vista previa comunidad" class="preview-img">
         </aside>
 
-        <section class="instagram-promo wide-section" id="instagram-section">
-            <div class="instagram-content">
-                <h2>Síguenos en Instagram</h2>
-                <p>No te pierdas nuestros últimos drops, historias exclusivas y el mejor estilo. ¡Conéctate con la comunidad PointDrops!</p>
-                <a href="https://www.instagram.com/pointdrops/" target="_blank" class="btn btn-primary btn-instagram">
-                    <i class="fab fa-instagram"></i> @pointdrops
-                </a>
-            </div>
-        </section>
-
-        <section class="carousel-section wide-section">
-            <h2>Nuestros Outfits Destacados</h2>
-            <div class="carousel-container">
-                <div class="carousel-inner">
-                    </div>
-                </div>
-            <p class="carousel-info">Deslízate para ver la inspiración.</p>
-        </section>
-
-        <section class="catalog-section wide-section" id="catalog-section">
-            <h2>Explora nuestro Catálogo</h2>
+        <section class="catalog-section">
             <div id="filters">
                 <select id="category-select">
                     <option value="todas">Todas las categorías</option>
@@ -92,11 +58,9 @@
             <div id="product-list"></div>
         </section>
 
-        <section class="admin-section wide-section" id="admin-section">
-            <h2>Área de Administración</h2>
-
-            <form id="admin-login-section" class="admin-form">
-                <h3>Iniciar sesión de administrador</h3>
+        <section class="admin-panel">
+            <form id="login" class="admin-form">
+                <h3>Iniciar sesión</h3>
                 <div class="form-group">
                     <label for="login-email">Email:</label>
                     <input type="email" id="login-email" placeholder="tu@email.com" required>
@@ -105,15 +69,19 @@
                     <label for="login-password">Contraseña:</label>
                     <input type="password" id="login-password" placeholder="••••••••" required>
                 </div>
-                <button type="button" class="btn btn-primary btn-block">Iniciar sesión</button>
+                <button type="button" class="btn btn-block">Iniciar sesión</button>
             </form>
 
-            <div id="admin-actions-section" class="admin-actions-container hidden">
-                <button id="show-add-product-form-btn" class="btn btn-secondary btn-block mb-3">Agregar/Ver formulario de producto</button>
-                <button id="logout-btn" class="btn btn-outline btn-block">Cerrar sesión</button>
+            <div id="admin-actions-container" class="hidden">
+                <div id="admin-actions">
+                    <button class="btn">Agregar nuevo producto</button>
+                </div>
+                <div id="logout-container">
+                    <button class="btn btn-secondary btn-block">Cerrar sesión</button>
+                </div>
             </div>
 
-            <form id="add-product-form" class="admin-form hidden">
+            <form id="add-form" class="admin-form hidden">
                 <h3>Agregar nuevo producto</h3>
                 <div class="form-group">
                     <label for="product-name">Nombre del producto:</label>
@@ -142,7 +110,7 @@
                     </div>
                     <img id="image-preview" class="hidden" />
                 </div>
-                <button type="button" class="btn btn-primary btn-block">Guardar producto</button>
+                <button type="button" class="btn btn-block">Guardar producto</button>
             </form>
         </section>
     </main>
