@@ -1,52 +1,107 @@
+/* --- Importación de Fuentes y Variables Globales --- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
+
 :root {
     --primary-color: #0d47a1;
+    --secondary-color: #6c757d;
     --light-bg: #f5f5f5;
     --dark-text: #111;
+    --body-font: 'Poppins', sans-serif;
+    --border-radius: 12px;
+    --shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-/* Reset básico */
+/* --- Reset Básico y Estilos Generales --- */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: var(--body-font);
 }
 
-/* Scroll suave */
 html {
     scroll-behavior: smooth;
 }
 
-/* Cuerpo general */
 body {
     background-color: var(--light-bg);
     color: var(--dark-text);
-    padding: 20px;
 }
 
-/* Encabezado */
+/* --- Encabezado y Hero --- */
 .hero {
-    width: 100%;
     background: linear-gradient(to right, #e0e0e0, #f5f5f5);
     color: var(--dark-text);
-    padding: 40px 0;
+    padding: 40px 20px;
     text-align: center;
     margin-bottom: 30px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .hero h1 {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
+    font-weight: 700;
     margin-bottom: 10px;
-    color: var(--dark-text);
 }
 
 .hero p {
     font-size: 1rem;
     color: #333;
+    margin-bottom: 20px;
 }
 
-/* Filtros */
+.contact-link {
+    font-weight: bold;
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+.contact-link:hover { opacity: 0.8; }
+.contact-link.whatsapp { color: #25D366; }
+.contact-link.instagram { color: #E1306C; }
+
+/* --- Secciones de Avisos (Reminders) --- */
+.reminder, .whatsapp-reminder {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    font-size: 0.95rem;
+    border-radius: var(--border-radius);
+    text-align: left;
+    line-height: 1.6;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    animation: fadeSlideIn 0.8s ease-out;
+}
+
+.reminder {
+    background-color: #fffde7;
+    color: #795548;
+    border-left: 6px solid #ffeb3b;
+    list-style-position: inside; /* Para que los bullets queden dentro */
+}
+
+.whatsapp-reminder {
+    background-color: #e8f5e9;
+    color: #1b5e20;
+    border-left: 6px solid #66bb6a;
+    text-align: center;
+}
+.whatsapp-reminder ul {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 15px;
+}
+.whatsapp-reminder .logo-wpp {
+    width: 28px;
+    vertical-align: middle;
+    transition: transform 0.2s;
+}
+.whatsapp-reminder .logo-wpp:hover { transform: scale(1.2); }
+.whatsapp-reminder .preview-img {
+    margin-top: 15px;
+    max-width: 100%;
+    border-radius: 8px;
+}
+
+/* --- Catálogo (Filtros y Grid de Productos) --- */
 #filters {
     text-align: center;
     margin-bottom: 30px;
@@ -58,82 +113,52 @@ body {
     border: 1px solid #ccc;
     font-size: 1rem;
     background-color: #fff;
-    color: #333;
     max-width: 250px;
-    transition: border 0.2s;
-}
-
-#category-select:focus {
-    border-color: var(--primary-color);
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(13, 71, 161, 0.2);
-}
-
-#filters button {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 8px;
     cursor: pointer;
-    transition: background 0.3s;
-    margin-left: 10px;
 }
 
-#filters button:hover {
-    background-color: #1565c0;
-}
-
-/* Productos */
 #product-list {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    /* La magia del grid fluido y adaptable */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 25px;
     padding: 0 20px;
     max-width: 1600px;
-    margin: 0 auto;
+    margin: 0 auto 40px;
 }
 
 .product-item {
     background-color: #fff;
     border: 1px solid #ddd;
-    border-radius: 12px;
+    border-radius: var(--border-radius);
     padding: 14px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     text-align: center;
     position: relative;
-    transition: all 0.3s ease;
+    /* Transición más suave */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .product-item:hover {
-    transform: scale(1.02);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transform: translateY(-5px);
+    box-shadow: var(--shadow);
 }
 
 .product-item img {
     width: 100%;
-    max-height: 240px;
+    height: 250px;
     object-fit: cover;
     border-radius: 10px;
-}
-
-.separator {
-    height: 1px;
-    background-color: #eee;
-    margin: 10px 0;
+    margin-bottom: 12px; /* Reemplaza al div.separator */
 }
 
 .product-item h3 {
-    margin: 8px 0 4px 0;
+    margin: 0;
     font-size: 1.1rem;
+    font-weight: 500;
+    color: #333;
 }
 
-.descripcion {
-    font-size: 0.85rem;
-    margin-bottom: 5px;
-}
-
-/* Botón de eliminar */
 .delete-btn {
     position: absolute;
     top: 10px;
@@ -146,255 +171,142 @@ body {
     height: 28px;
     font-weight: bold;
     cursor: pointer;
-    transition: background 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 2px;
+    transition: background 0.3s, transform 0.3s;
 }
 
 .delete-btn:hover {
     background-color: darkred;
+    transform: scale(1.1);
 }
 
-/* Formularios */
-#login, #logout-container, #admin-actions, #add-form {
-    max-width: 400px;
-    margin: 20px auto;
+/* --- Panel de Administrador y Formularios --- */
+.admin-panel {
+    max-width: 450px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.admin-form {
     background-color: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    padding: 25px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+}
+.admin-form h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 700;
 }
 
-#add-form {
-    display: none;
-}
-
-input, select {
-    width: 100%;
-    padding: 10px;
-    margin-top: 8px;
+.form-group {
     margin-bottom: 16px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #555;
+}
+
+input[type="text"], input[type="email"], input[type="password"], select {
+    width: 100%;
+    padding: 12px;
     border: 1px solid #ccc;
-    border-radius: 6px;
+    border-radius: 8px;
     background-color: #fafafa;
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
-    transition: border 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 input:focus, select:focus {
     border-color: var(--primary-color);
     outline: none;
+    box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.2);
 }
 
-/* Botón global */
-button {
-    width: 100%;
-    padding: 10px;
+#admin-actions-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+/* --- Componentes de Botones --- */
+.btn {
+    width: auto;
+    padding: 12px 24px;
     background-color: var(--primary-color);
     color: white;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    transition: background 0.3s;
-}
-
-button:hover {
-    background-color: #1565c0;
-}
-
-/* --- Responsivo --- */
-@media (max-width: 1400px) {
-    #product-list {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-
-@media (max-width: 1100px) {
-    #product-list {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (max-width: 800px) {
-    #product-list {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 500px) {
-    #product-list {
-        grid-template-columns: repeat(1, 1fr);
-    }
-
-    .hero h1 {
-        font-size: 2rem;
-    }
-
-    .hero p {
-        font-size: 0.9rem;
-    }
-}
-
-
-.footer {
-    background: linear-gradient(to top, #e3f2fd, #f5f5f5);
-    padding: 30px 20px;
+    transition: background 0.3s, transform 0.2s;
+    font-size: 1rem;
+    font-weight: 500;
     text-align: center;
-    font-size: 0.9rem;
-    color: #333;
-    margin-top: 50px;
 }
-
-.footer-content {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 10px 20px;
-    color: #333;
+.btn:hover {
+    background-color: #1565c0;
+    transform: translateY(-2px);
 }
-
-.footer-content p {
-    margin-bottom: 10px;
-    font-size: 0.9rem;
-}
+.btn-block { width: 100%; }
+.btn-secondary { background-color: var(--secondary-color); }
+.btn-secondary:hover { background-color: #5a6268; }
 
 
-.footer .social-icons a {
-    margin: 0 10px;
-    display: inline-block;
-}
-
-.footer .social-icons a img {
-    width: 28px;
-    height: 28px;
-    max-width: 100%;
-    object-fit: contain;
-    transition: transform 0.3s ease, filter 0.3s ease;
-    filter: grayscale(100%) brightness(0.6);
-}
-
-
-.social-icons a:hover img {
-    transform: scale(1.2);
-    filter: grayscale(0%) brightness(1.2);
-}
-
+/* Drag and Drop Zone */
 #drop-zone {
     border: 2px dashed #ccc;
     border-radius: 10px;
-    padding: 20px;
+    padding: 30px;
     text-align: center;
     color: #888;
     background-color: #fafafa;
     cursor: pointer;
-    transition: border-color 0.2s;
+    transition: all 0.2s;
 }
-
 #drop-zone.dragover {
     border-color: var(--primary-color);
     background-color: #e3f2fd;
     color: var(--primary-color);
 }
-
-.reminder {
-    background-color: #fffde7; /* amarillo claro */
-    color: #795548; /* marrón suave */
-    border-left: 6px solid #ffeb3b;
-    padding: 20px;
-    margin: 20px auto; /* centrado */
-    max-width: 800px; /* límite para no ocupar todo el ancho */
-    font-size: 0.95rem;
-    border-radius: 10px;
-    text-align: center;
-    line-height: 1.6;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-
-.whatsapp-reminder {
-    background-color: #e8f5e9; /* verde claro */
-    color: #1b5e20; /* verde oscuro */
-    border-left: 6px solid #66bb6a;
-    padding: 20px;
-    margin: 20px auto;
-    max-width: 800px;
-    font-size: 0.95rem;
-    border-radius: 10px;
-    text-align: center;
-    line-height: 1.6;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.whatsapp-reminder img.logo-wpp {
-    width: 28px;
-    vertical-align: middle;
-    margin-left: 6px;
-    transition: transform 0.2s;
-}
-
-.whatsapp-reminder img.logo-wpp:hover {
-    transform: scale(1.2);
-}
-
-.whatsapp-reminder .preview-img {
-    margin-top: 15px;
+#image-preview {
     max-width: 100%;
+    margin-top: 15px;
     border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
+
+/* --- Footer --- */
+.footer {
+    background: #e0e0e0;
+    padding: 40px 20px;
+    text-align: center;
+    color: #333;
+    margin-top: 50px;
+}
+.footer-content p { margin-bottom: 15px; }
+.footer .social-icons a { margin: 0 10px; }
+.footer .social-icons img {
+    width: 28px;
+    height: 28px;
+    transition: transform 0.3s ease;
+}
+.footer .social-icons a:hover img { transform: scale(1.2); }
+
+/* --- Clases de Utilidad y Animaciones --- */
+.hidden { display: none !important; }
 
 @keyframes fadeSlideIn {
     from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(20px);
     }
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
-
-.reminder,
-.whatsapp-reminder {
-    animation: fadeSlideIn 0.8s ease-out;
-    
-}
-
-
-
-
-.hero-content {
-  position: relative;
-  text-align: center;
-  padding: 40px;
-  background: linear-gradient(to right, #e2e2e2, #f8f8f8);
-  overflow: hidden;
-}
-
-/* Fila de logos arriba */
-.hero-content::before,
-.hero-content::after {
-  content: "";
-  display: block;
-  height: 60px; /* altura de la fila de logos */
-  background-image: url('https://i.ibb.co/Q7t2mJqD/logo.jpg');
-  background-repeat: repeat-x;
-  background-size: 60px auto;
-  opacity: 0.08;
-  position: absolute;
-  left: 0;
-  right: 0;
-  z-index: 0;
-}
-
-.hero-content::before {
-  top: 0;
-}
-
-.hero-content::after {
-  bottom: 0;
-}
-
-/* Asegura que el contenido esté por encima */
-.hero-content > * {
-  position: relative;
-  z-index: 1;
-}
-
