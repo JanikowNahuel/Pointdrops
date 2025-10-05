@@ -257,160 +257,119 @@ a {
 }
 
 
-/* --- Bloque de Beneficios de la Comunidad de WhatsApp (NUEVO DISEÑO ASIMÉTRICO BLANCO/NEGRO) --- */
-
-.whatsapp-reminder {
-    background-color: var(--white); /* Fondo blanco */
-    color: var(--dark-text); /* Texto oscuro */
-    
-    /* Restauramos algunos estilos de "bloque" pero modernos */
-    max-width: 1400px; /* Ancho máximo para que no sea excesivamente ancha */
-    margin: 0 auto 80px auto; /* Centrada y con margen inferior */
-    border-radius: var(--border-radius); /* Bordes redondeados */
-    box-shadow: var(--shadow); /* Sombra sutil para darle profundidad */
-
-    border: none; /* Eliminamos los bordes superior/inferior */
-    backdrop-filter: none; /* Eliminamos el efecto de desenfoque */
-    -webkit-backdrop-filter: none;
-
-    padding: 60px 40px; /* Padding generoso */
-    animation: fadeSlideIn 0.8s ease-out;
+/* --- NUEVA SECCIÓN DE TARJETAS PROMOCIONALES --- */
+.promo-section {
+    background-color: var(--white); /* Fondo blanco para esta sección */
 }
 
-/* El contenedor de contenido que organiza el texto y la imagen */
-.whatsapp-content {
-    display: flex; /* Habilitar Flexbox */
-    flex-wrap: wrap; /* Permitir que los elementos se envuelvan en pantallas pequeñas */
-    gap: 40px; /* Espacio entre el texto y la imagen */
-    align-items: center; /* Centrar verticalmente los elementos */
-    justify-content: center; /* Centrar horizontalmente en caso de que no haya suficiente espacio */
-    max-width: 1200px; /* Mantiene el ancho máximo para el contenido interno */
-    margin: 0 auto; /* Asegura que el contenido esté centrado dentro del reminder */
+.promo-cards-container {
+    display: grid; /* Usamos grid para un layout robusto */
+    grid-template-columns: 1fr 1fr; /* Dos columnas de igual tamaño */
+    gap: 30px; /* Espacio entre las tarjetas */
+}
+
+.promo-card {
+    background-color: #f9f9f9; /* Un gris muy claro para el fondo de la tarjeta */
+    border: 1px solid #e9e9e9;
+    border-radius: 16px; /* Bordes bien redondeados */
+    padding: 35px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Espacia el texto y el visual */
+    overflow: hidden; /* Importante para que los visuales no se salgan */
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.promo-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.card-text-content {
     text-align: left; /* Alineamos el texto a la izquierda */
-}
-
-/* Contenedor para el texto de los beneficios */
-.whatsapp-text-content {
-    flex: 1; /* Ocupa el espacio restante */
-    min-width: 300px; /* Ancho mínimo para que el texto no se comprima demasiado */
-    max-width: 600px; /* Ancho máximo para el texto */
-}
-
-.whatsapp-content h3 {
-    font-family: var(--header-font);
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 30px;
-    color: var(--dark-text); /* Título oscuro */
-}
-
-.whatsapp-content ul {
-    list-style-type: disc; /* Vuelven los puntos de la lista */
-    list-style-position: inside; /* Puntos dentro del texto */
-    padding: 0;
-    margin: 0 auto 40px auto;
-    max-width: 600px; /* Se mantiene para la lista */
-    text-align: left; /* Asegura que la lista se alinee a la izquierda */
-}
-
-.whatsapp-content ul li {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    color: var(--secondary-color); /* Un gris oscuro para los beneficios */
-    margin-bottom: 10px; /* Espacio entre ítems de la lista */
-}
-
-.whatsapp-content strong {
-    display: block;
-    margin-top: 40px;
-    margin-bottom: 20px;
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--primary-color); /* Color principal oscuro para el CTA */
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.whatsapp-content .logo-wpp {
-    width: 50px;
-    height: 50px;
-    transition: transform 0.3s ease, filter 0.3s ease;
-    filter: none; /* Quitamos el filtro invert y brightness para que use el color original del ícono de WhatsApp */
-}
-
-.whatsapp-content .logo-wpp:hover {
-    transform: scale(1.15);
-    filter: none; /* Mantenemos sin filtro al hover */
-}
-
-/* Contenedor para la imagen */
-.whatsapp-image-container {
-    flex: 1; /* Ocupa el espacio restante */
-    min-width: 300px; /* Ancho mínimo para la imagen */
-    max-width: 500px; /* Ancho máximo para la imagen */
-    display: flex; /* Para centrar la imagen dentro de su contenedor */
-    justify-content: flex-end; /* Alinea la imagen a la derecha por defecto */
-}
-
-.whatsapp-content .preview-img {
-    max-width: 100%;
-    height: auto;
-    border-radius: var(--border-radius);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* Sombra más pronunciada para la imagen */
-    border: 1px solid #ddd; /* Borde sutil */
-}
-
-/* --- Media Queries para responsividad (¡IMPORTANTE!) --- */
-@media (max-width: 768px) {
-    .whatsapp-content {
-        flex-direction: column; /* Apilar elementos en pantallas pequeñas */
-        text-align: center; /* Centrar texto */
-    }
-
-    .whatsapp-content ul {
-        list-style-position: outside; /* Puntos fuera para mejor lectura si el texto es centrado */
-        text-align: center;
-        padding-left: 20px; /* Ajuste para los bullets */
-    }
-
-    .whatsapp-image-container {
-        justify-content: center; /* Centrar imagen cuando se apila */
-        order: -1; /* Mueve la imagen arriba en mobile si quieres */
-        margin-bottom: 30px; /* Espacio entre imagen y texto */
-    }
-
-    .whatsapp-content h3 { font-size: 1.8rem; }
-    .whatsapp-content ul li { font-size: 1rem; }
-    .whatsapp-content strong { font-size: 1.1rem; }
-}
-
-/* --- Nueva Sección: Instagram Promo --- */
-.instagram-promo {
-    background: linear-gradient(to right, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); /* Colores de Instagram */
-    color: var(--white);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-    padding: 60px;
-    margin-bottom: 80px;
-}
-.instagram-promo h2 {
-    color: var(--white); /* Título blanco */
-    margin-bottom: 30px;
-}
-.instagram-promo h2::after {
-    background-color: var(--white); /* Subrayado blanco */
-}
-.instagram-promo p {
-    font-size: 1.2rem;
     margin-bottom: 40px;
-    max-width: 700px;
-    margin-left: auto;
-    margin-right: auto;
-    line-height: 1.6;
 }
-.instagram-promo .btn-instagram {
-    font-size: 1.1rem;
-    padding: 15px 35px;
+
+.card-text-content h2 {
+    font-family: var(--header-font);
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--dark-text);
+    margin-bottom: 15px;
+}
+
+/* Eliminamos el subrayado decorativo para los títulos de las tarjetas */
+.card-text-content h2::after {
+    display: none;
+}
+
+.card-text-content p {
+    font-size: 1rem;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+/* Nuevo estilo para el botón de las tarjetas */
+.btn-promo {
+    background-color: #ede7ff; /* Fondo lila claro */
+    color: #582dc7; /* Texto violeta oscuro */
+    font-weight: 700;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px -5px rgba(88, 45, 199, 0.3);
+}
+
+.btn-promo:hover {
+    background-color: #582dc7;
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px -5px rgba(88, 45, 199, 0.5);
+}
+
+/* --- ESTILOS PARA LOS VISUALES DE LAS TARJETAS --- */
+.card-visual-content {
+    flex-grow: 1; /* Permite que esta área ocupe el espacio sobrante */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 250px; /* Altura mínima para el área visual */
+}
+
+/* Visual para la tarjeta de WhatsApp (simulando el code block) */
+.visual-dark-container {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, #2a2a2a 0%, #111 100%);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+}
+.visual-dark-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Para que la captura se vea completa */
+    border-radius: 8px;
+}
+
+
+
+/* --- MEDIA QUERY PARA RESPONSIVIDAD --- */
+@media (max-width: 900px) {
+    .promo-cards-container {
+        grid-template-columns: 1fr; /* Una columna en pantallas más pequeñas */
+    }
+}
+
+@media (max-width: 480px) {
+    .promo-card {
+        padding: 25px;
+    }
+    .card-text-content h2 {
+        font-size: 1.8rem;
+    }
 }
 
 /* --- Nueva Sección: Carrusel de Outfits (Estilo Coverflow 3D) --- */
@@ -447,7 +406,7 @@ a {
 
 .carousel-item {
     position: absolute;
-    width: 60%;
+    width: 60%; /* Ancho de la imagen central */
     height: 100%;
     top: 0;
     left: 0;
@@ -458,11 +417,7 @@ a {
     background-color: #333;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.6s;
-    
-    /* -webkit-box-reflect: ... */ /* <-- LÍNEA ELIMINADA O COMENTADA */
-
-    /* AVISO AL NAVEGADOR PARA QUE OPTIMICE LA ANIMACIÓN (ACELERACIÓN POR HARDWARE) */
-    will-change: transform, opacity;
+    -webkit-box-reflect: below 15px linear-gradient(transparent 50%, rgba(255,255,255,0.2)); /* Efecto de reflejo */
 }
 
 .carousel-item img {
@@ -783,5 +738,7 @@ input:focus, select:focus {
 
     .admin-form { padding: 20px; }
 }
+
+
 
 
