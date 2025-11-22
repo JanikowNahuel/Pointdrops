@@ -68,18 +68,7 @@ function setupEventListeners() {
     }
 }
 
-// --- RENDERIZADO Y MANEJO DE PRODUCTOS ---
-async function fetchProducts() {
-    const { data, error } = await supabase.from('productos').select('*');
-    if (error) {
-        console.error('Error fetching products:', error);
-        return;
-    }
-    if (data) {
-        allProducts = data;
-        renderProducts(allProducts);
-    }
-}
+v
 
 function renderProducts(products) {
     if (!productListContainer) return;
