@@ -68,7 +68,7 @@ function setupEventListeners() {
     }
 }
 
-// --- RENDERIZADO Y MANEJO DE PRODUCTOS ---
+// --- RENDERIZADO Y MANEJO DE PRODUCTOS (CON ORDENAMIENTO) ---
 async function fetchProducts() {
     const { data, error } = await supabase.from('productos').select('*');
     if (error) {
@@ -77,7 +77,6 @@ async function fetchProducts() {
     }
     if (data) {
         // 1. Definimos el orden de prioridad de las categorías
-        // (Asegúrate de que los nombres sean IDÉNTICOS a los que guardas en la BD)
         const categoryOrder = [
             "remeras",
             "pantalones largos",
@@ -92,15 +91,13 @@ async function fetchProducts() {
 
         // 2. Ordenamos los datos recibidos
         data.sort((a, b) => {
-            // Buscamos en qué posición de nuestra lista está la categoría de cada producto
             let indexA = categoryOrder.indexOf(a.categoria);
             let indexB = categoryOrder.indexOf(b.categoria);
 
-            // Si una categoría no está en la lista, la mandamos al final (999)
+            // Si no está en la lista, va al final
             if (indexA === -1) indexA = 999;
             if (indexB === -1) indexB = 999;
 
-            // Restamos los índices para ordenar de menor a mayor (según nuestra lista)
             return indexA - indexB;
         });
 
@@ -263,7 +260,7 @@ function handleDeleteProduct(id) {
         cancelButtonText: 'Cancelar'
     }).then(async (result) => {
         if (result.isConfirmed) {
-            // Borramos solo de la base de datos (la imagen queda en Cloudinary, pero no importa)
+            // Borramos solo de la base de datos
             const { error: deleteError } = await supabase.from('productos').delete().eq('id', id);
 
             if (deleteError) {
