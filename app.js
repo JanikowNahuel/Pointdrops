@@ -68,7 +68,7 @@ function setupEventListeners() {
     }
 }
 
-v
+
 
 function renderProducts(products) {
     if (!productListContainer) return;
