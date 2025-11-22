@@ -1,5 +1,3 @@
-// app.js (AJUSTADO PARA LA NUEVA ESTRUCTURA)
-
 const supabaseUrl = 'https://hifmffqdooihgotquxnd.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhpZm1mZnFkb29paGdvdHF1eG5kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY1OTAxMzQsImV4cCI6MjA2MjE2NjEzNH0.3nprN0B0wsXmpMFEaAbaZLLHvo3jUs4FwhZjkc4fxqo';
 const adminEmail = 'janikownahuel@gmail.com';
@@ -9,10 +7,10 @@ const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 let allProducts = [];
 let isAdmin = false;
 
-// Elementos del DOM (¡AJUSTADOS a los nuevos IDs/Clases!)
-const loginSection = document.getElementById('admin-login-section'); // Cambiado a section
-const adminActionsSection = document.getElementById('admin-actions-section'); // Nueva sección para acciones de admin
-const addProductForm = document.getElementById('add-product-form'); // Cambiado a form
+// Elementos del DOM
+const loginSection = document.getElementById('admin-login-section');
+const adminActionsSection = document.getElementById('admin-actions-section');
+const addProductForm = document.getElementById('add-product-form');
 const productListContainer = document.getElementById('product-list');
 const categorySelect = document.getElementById('category-select');
 
@@ -21,38 +19,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupEventListeners();
     await checkAdminStatus();
     fetchProducts();
-    setupCarousel(); // Inicializar el carrusel
+    setupCarousel();
 });
 
 function setupEventListeners() {
     // Botones de autenticación y admin
-    if (loginSection) { // Asegúrate de que existe
+    if (loginSection) {
         loginSection.querySelector('.btn-primary').addEventListener('click', handleLogin);
     }
-    if (adminActionsSection) { // Asegúrate de que existe
-        adminActionsSection.querySelector('#logout-btn').addEventListener('click', handleLogout); // Añadido ID al botón
-        adminActionsSection.querySelector('#show-add-product-form-btn').addEventListener('click', showAddProductForm); // Añadido ID al botón
+    if (adminActionsSection) {
+        adminActionsSection.querySelector('#logout-btn').addEventListener('click', handleLogout);
+        adminActionsSection.querySelector('#show-add-product-form-btn').addEventListener('click', showAddProductForm);
     }
     
     // Botón de guardar producto
-    if (addProductForm) { // Asegúrate de que existe
-        addProductForm.querySelector('.btn-primary').addEventListener('click', handleAddProduct); // Usar la nueva clase btn-primary
+    if (addProductForm) {
+        addProductForm.querySelector('.btn-primary').addEventListener('click', handleAddProduct);
     }
 
     // Filtro de categoría
-    if (categorySelect) { // Asegúrate de que existe
+    if (categorySelect) {
         categorySelect.addEventListener('change', (e) => filterByCategory(e.target.value));
     }
 
     // Delegación de eventos para botones de eliminar
-    if (productListContainer) { // Asegúrate de que existe
+    if (productListContainer) {
         productListContainer.addEventListener('click', (e) => {
             if (e.target && e.target.classList.contains('delete-btn')) {
                 const productItem = e.target.closest('.product-item');
                 if (productItem) {
                     const id = productItem.dataset.id;
-                    const imagePath = productItem.dataset.imagePath;
-                    handleDeleteProduct(id, imagePath);
+                    handleDeleteProduct(id);
                 }
             }
         });
@@ -62,10 +59,13 @@ function setupEventListeners() {
     setupDragAndDrop();
 
     // Listener para el botón "Ver Catálogo" en el hero
-    document.getElementById('view-catalog-btn').addEventListener('click', (e) => {
-        e.preventDefault();
-        document.getElementById('catalog-section').scrollIntoView({ behavior: 'smooth' });
-    });
+    const viewCatalogBtn = document.getElementById('view-catalog-btn');
+    if (viewCatalogBtn) {
+        viewCatalogBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('catalog-section').scrollIntoView({ behavior: 'smooth' });
+        });
+    }
 }
 
 // --- RENDERIZADO Y MANEJO DE PRODUCTOS ---
@@ -82,16 +82,14 @@ async function fetchProducts() {
 }
 
 function renderProducts(products) {
-    if (!productListContainer) return; // Asegura que el contenedor exista
+    if (!productListContainer) return;
 
     productListContainer.innerHTML = ''; // Limpiar contenedor
     products.forEach(p => {
-        const imagePath = p.imagen ? p.imagen.split('/').pop() : '';
         const productDiv = document.createElement('div');
         productDiv.className = 'product-item';
         productDiv.dataset.id = p.id;
-        productDiv.dataset.imagePath = imagePath;
-
+        
         productDiv.innerHTML = `
             ${p.imagen ? `<img src="${p.imagen}" alt="${p.nombre}">` : ''}
             <h3>${p.nombre}</h3>
@@ -118,9 +116,9 @@ async function checkAdminStatus() {
 function updateAdminUI() {
     if (loginSection) loginSection.classList.toggle('hidden', isAdmin);
     if (adminActionsSection) adminActionsSection.classList.toggle('hidden', !isAdmin);
-    if (addProductForm) addProductForm.classList.add('hidden'); // Ocultar siempre el formulario de añadir al cambiar estado
+    if (addProductForm) addProductForm.classList.add('hidden');
 
-    renderProducts(allProducts); // Volver a renderizar para actualizar botones de eliminar
+    renderProducts(allProducts);
 }
 
 async function handleLogin() {
@@ -129,6 +127,10 @@ async function handleLogin() {
     const email = emailInput.value;
     const password = passwordInput.value;
 
+    if (!email || !password) {
+        return showNotification('Error', 'Por favor ingresa email y contraseña.', 'warning');
+    }
+
     const { error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
@@ -136,7 +138,6 @@ async function handleLogin() {
     } else {
         showNotification('¡Éxito!', 'Sesión iniciada correctamente.', 'success');
         await checkAdminStatus();
-        // Limpiar campos del formulario de login
         emailInput.value = '';
         passwordInput.value = '';
     }
@@ -149,7 +150,7 @@ async function handleLogout() {
     showNotification('Sesión cerrada', '', 'info');
 }
 
-// --- ACCIONES DE ADMINISTRADOR (CRUD) ---
+// --- ACCIONES DE ADMINISTRADOR (CRUD con Cloudinary) ---
 function showAddProductForm() {
     if (addProductForm) addProductForm.classList.toggle('hidden');
 }
@@ -163,42 +164,68 @@ async function handleAddProduct() {
     const categoria = productCategorySelect.value;
     const file = productImageInput.files[0];
 
+    // --- CONFIGURACIÓN DE CLOUDINARY ---
+    const CLOUD_NAME = 'dw3vx5njo';
+    const UPLOAD_PRESET = 'pointdrops_uploads';
+    // -----------------------------------
+
     if (!nombre || !categoria || !file) {
         return showNotification('Campos incompletos', 'Por favor, completa todos los campos y selecciona una imagen.', 'warning');
     }
 
-    const filePath = `${Date.now()}_${file.name}`;
-    const { error: uploadError } = await supabase.storage.from('productos').upload(filePath, file);
+    try {
+        showNotification('Subiendo...', 'Por favor espera mientras se sube la imagen.', 'info');
 
-    if (uploadError) {
-        return showNotification('Error de subida', uploadError.message, 'error');
-    }
+        // 1. Preparar los datos para enviar a Cloudinary
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', UPLOAD_PRESET);
 
-    const { data: { publicUrl } } = supabase.storage.from('productos').getPublicUrl(filePath);
+        // 2. Subir la imagen directamente a Cloudinary
+        const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+            method: 'POST',
+            body: formData
+        });
 
-    const { error: insertError } = await supabase.from('productos').insert({ nombre, categoria, imagen: publicUrl });
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Cloudinary error:', errorData);
+            throw new Error('Error al subir la imagen a Cloudinary');
+        }
 
-    if (insertError) {
-        showNotification('Error al guardar', insertError.message, 'error');
-    } else {
+        const data = await response.json();
+        const publicUrl = data.secure_url; // URL segura de Cloudinary
+
+        // 3. Guardar la URL y los datos en la base de datos de Supabase
+        const { error: insertError } = await supabase
+            .from('productos')
+            .insert({ nombre, categoria, imagen: publicUrl });
+
+        if (insertError) throw insertError;
+
+        // 4. Éxito
         showNotification('¡Producto agregado!', 'El nuevo producto ya está en el catálogo.', 'success');
         if (addProductForm) addProductForm.classList.add('hidden');
         
-        // Resetear campos del formulario
+        // Resetear campos
         productNameInput.value = '';
         productCategorySelect.value = '';
-        productImageInput.value = ''; // Limpiar el input de archivo
+        productImageInput.value = '';
         document.getElementById('image-preview').classList.add('hidden');
-        document.getElementById('image-preview').src = ''; // Limpiar preview
-
+        document.getElementById('image-preview').src = '';
+        
         fetchProducts();
+
+    } catch (error) {
+        console.error(error);
+        showNotification('Error', `Hubo un problema: ${error.message}`, 'error');
     }
 }
 
-function handleDeleteProduct(id, imagePath) {
+function handleDeleteProduct(id) {
     Swal.fire({
         title: '¿Estás seguro?',
-        text: "No podrás revertir esta acción.",
+        text: "El producto se eliminará del catálogo.",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -207,12 +234,7 @@ function handleDeleteProduct(id, imagePath) {
         cancelButtonText: 'Cancelar'
     }).then(async (result) => {
         if (result.isConfirmed) {
-            if (imagePath) {
-                const { error: removeError } = await supabase.storage.from('productos').remove([imagePath]);
-                if (removeError) {
-                    return showNotification('Error al eliminar imagen', removeError.message, 'error');
-                }
-            }
+            // Borramos solo de la base de datos (la imagen queda en Cloudinary, pero no importa)
             const { error: deleteError } = await supabase.from('productos').delete().eq('id', id);
 
             if (deleteError) {
@@ -227,7 +249,11 @@ function handleDeleteProduct(id, imagePath) {
 
 // --- UTILIDADES ---
 function showNotification(title, text, icon) {
-    Swal.fire({ title, text, icon, timer: 3000, timerProgressBar: true });
+    if (typeof Swal !== 'undefined') {
+        Swal.fire({ title, text, icon, timer: 3000, timerProgressBar: true });
+    } else {
+        alert(`${title}: ${text}`);
+    }
 }
 
 function setupDragAndDrop() {
@@ -235,7 +261,7 @@ function setupDragAndDrop() {
     const imageInput = document.getElementById('product-image');
     const imagePreview = document.getElementById('image-preview');
 
-    if (!dropZone || !imageInput || !imagePreview) return; // Asegura que los elementos existan
+    if (!dropZone || !imageInput || !imagePreview) return;
 
     dropZone.addEventListener('click', () => imageInput.click());
     dropZone.addEventListener('dragover', (e) => {
@@ -267,12 +293,10 @@ function setupDragAndDrop() {
     }
 }
 
-
-
-// --- CARRUSEL (NUEVA LÓGICA COVERFLOW 3D) ---
+// --- CARRUSEL (LÓGICA COVERFLOW 3D) ---
 let currentIndex = 0;
 let slides = [
-    'https://i.pinimg.com/736x/49/3b/81/493b81907bb68f4d2ec4a838242d7215.jpg', // Reemplaza con tus URLs
+    'https://i.pinimg.com/736x/49/3b/81/493b81907bb68f4d2ec4a838242d7215.jpg',
     'https://i.pinimg.com/1200x/2a/f8/84/2af884620d40a2819c9b99c822575236.jpg',
     'https://i.pinimg.com/736x/82/98/8a/82988a6476d5cc29a58c3a192e07d9a4.jpg',
     'https://i.pinimg.com/736x/f9/34/6d/f9346d1c8157d295c4b7bd38921e8aeb.jpg',
@@ -296,14 +320,12 @@ function setupCarousel() {
 
     if (!carouselInner || !prevButton || !nextButton) return;
 
-    // Poblar el carrusel con las imágenes
     carouselInner.innerHTML = slides.map((src, index) => `
         <div class="carousel-item" data-index="${index}">
             <img src="${src}" alt="Outfit ${index + 1}">
         </div>
     `).join('');
 
-    // Configurar listeners para los botones
     prevButton.addEventListener('click', () => {
         navigateCarousel(-1);
         resetCarouselInterval();
@@ -314,26 +336,19 @@ function setupCarousel() {
     });
 
     updateCarousel();
-    startCarouselInterval(); // Iniciar el carrusel automático
+    startCarouselInterval();
 }
 
 function updateCarousel() {
     const items = document.querySelectorAll('.carousel-item');
-    
-    // Calcular los índices para las diapositivas anterior y siguiente
     const prevIndex = (currentIndex - 1 + totalSlides) % totalSlides;
     const nextIndex = (currentIndex + 1) % totalSlides;
 
     items.forEach((item, index) => {
         item.classList.remove('active', 'prev', 'next');
-
-        if (index === currentIndex) {
-            item.classList.add('active');
-        } else if (index === prevIndex) {
-            item.classList.add('prev');
-        } else if (index === nextIndex) {
-            item.classList.add('next');
-        }
+        if (index === currentIndex) item.classList.add('active');
+        else if (index === prevIndex) item.classList.add('prev');
+        else if (index === nextIndex) item.classList.add('next');
     });
 }
 
@@ -342,16 +357,13 @@ function navigateCarousel(direction) {
     updateCarousel();
 }
 
-// Funciones para el carrusel automático
 function startCarouselInterval() {
     carouselInterval = setInterval(() => {
-        navigateCarousel(1); // Mueve a la siguiente diapositiva
-    }, 5000); // Cambia de slide cada 5 segundos
+        navigateCarousel(1);
+    }, 5000);
 }
 
 function resetCarouselInterval() {
     clearInterval(carouselInterval);
     startCarouselInterval();
 }
-
-// Llamamos a setupCarousel al cargar la página (ya lo tienes en DOMContentLoaded)
