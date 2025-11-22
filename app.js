@@ -68,7 +68,47 @@ function setupEventListeners() {
     }
 }
 
+// --- RENDERIZADO Y MANEJO DE PRODUCTOS ---
+async function fetchProducts() {
+    const { data, error } = await supabase.from('productos').select('*');
+    if (error) {
+        console.error('Error fetching products:', error);
+        return;
+    }
+    if (data) {
+        // 1. Definimos el orden de prioridad de las categorías
+        // (Asegúrate de que los nombres sean IDÉNTICOS a los que guardas en la BD)
+        const categoryOrder = [
+            "remeras",
+            "pantalones largos",
+            "pantalones cortos",
+            "hoodies",
+            "camperas",
+            "gorras",
+            "accesorios",
+            "conjuntos",
+            "sneaker"
+        ];
 
+        // 2. Ordenamos los datos recibidos
+        data.sort((a, b) => {
+            // Buscamos en qué posición de nuestra lista está la categoría de cada producto
+            let indexA = categoryOrder.indexOf(a.categoria);
+            let indexB = categoryOrder.indexOf(b.categoria);
+
+            // Si una categoría no está en la lista, la mandamos al final (999)
+            if (indexA === -1) indexA = 999;
+            if (indexB === -1) indexB = 999;
+
+            // Restamos los índices para ordenar de menor a mayor (según nuestra lista)
+            return indexA - indexB;
+        });
+
+        // 3. Guardamos y renderizamos
+        allProducts = data;
+        renderProducts(allProducts);
+    }
+}
 
 function renderProducts(products) {
     if (!productListContainer) return;
